@@ -1,0 +1,12 @@
+
+//Backend
+npm i -g typescript
+
+// the typescript is now present at : C:/users/appdata/npm/ add this to path 
+
+npm i express cors dotenv
+
+npm i --save-dev typescript tsc ts-node-dev @types/express @types/node @types/cors
+
+//init typescript config
+

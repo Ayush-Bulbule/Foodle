@@ -1,0 +1,40 @@
+import express, { Express, Response, Request } from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import connectDB from './app/config/db';
+import router from './routes/routes';
+import bodyParser from 'body-parser';
+
+const app: Express = express();
+connectDB();
+
+//middleware
+app.use(express.json());
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+// Parse JSON data
+app.use(bodyParser.json());
+
+dotenv.config();
+
+
+
+//routes
+app.use('/api', router);
+
+
+
+const port = process.env.PORT || 4000;
+
+
+
+
+app.get("/", (req: Request, res: Response) => {
+    res.send("Hello World")
+});
+
+
+app.listen(port, () => {
+    console.log(`⚡Server running on port ${port}`);
+});
+
