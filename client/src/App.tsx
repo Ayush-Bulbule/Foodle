@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Routes, Route } from "react-router-dom"
 import {
   ChakraProvider,
   Box,
@@ -10,20 +11,49 @@ import {
   theme,
 } from "@chakra-ui/react"
 import { ColorModeSwitcher } from "./ColorModeSwitcher"
+import Navbar from "./components/Navbar"
+import Home from "./pages/Home"
+import About from "./pages/About"
+import Contact from "./pages/Contact"
+// Supports weights 100-900
+import '@fontsource-variable/outfit';
+
+import { extendTheme } from "@chakra-ui/react"
+
+// 2. Call `extendTheme` and pass your custom values
+const appTheme = extendTheme({
+  fonts: {
+    heading: `'Open Sans', sans-serif`,
+    body: `'Outfit Variable', sans-serif`,
+  },
+  colors: {
+    primary: {
+      100: "#FEF7F9",
+      200: "#FDE2E7",
+      300: "#FCCDDF",
+      400: "#FBB8D6",
+      500: "#FAA3CE",
+      600: "#F88EB5",
+      700: "#F679AD",
+      800: "#F464A5",
+      900: "#F34F9D"
+    },
+    test: {
+      "primaryOrange": "#FFA500",
+      "secondaryGreen": "#4CAF50",
+      "neutralGrey": "#757575",
+      "accentYellow": "#FFD700"
+    }
+  },
+})
 
 export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Text>
-            Hello There Welcome to Grub
-          </Text>
-
-
-        </VStack>
-      </Grid>
-    </Box>
+  <ChakraProvider theme={appTheme}>
+    <Navbar />
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+    </Routes>
   </ChakraProvider >
 )
