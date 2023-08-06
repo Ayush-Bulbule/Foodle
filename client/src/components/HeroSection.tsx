@@ -5,7 +5,7 @@ const HeroSection = () => {
     return (
         <Container maxW="container.xl">
             {/* Your content goes here */}
-            <Box display="flex" alignItems={"center"} justifyContent={"center"} h={'full'}>
+            <Box display="flex" flexDirection={{ base: 'column-reverse', md: 'row' }} alignItems={"center"} justifyContent={"center"} h={'full'}>
                 <Box flex="1" p={4} alignItems={"center"} justifyContent={"center"} h={'full'}>
                     {/* Content for the left half */}
                     <Text fontSize="4xl" fontWeight="bold">

@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Text, SimpleGrid, Menu, Flex } from '@chakra-ui/react'
+import { Box, Container, Grid, Text, SimpleGrid, Menu, Flex, Button } from '@chakra-ui/react'
 import React from 'react'
 import MenuCard from './MenuCard'
 
@@ -29,7 +29,7 @@ const menu = [
 
 const OurMenuSection = () => {
     return (
-        <Container minH={'4xl'} maxW={'container.xl'} flex={1} my={'12'} alignItems={'center'} justifyContent={'center'}>
+        <Container display={'flex'} justifyItems={'center'} flexDirection={'column'} minH={'4xl'} maxW={'container.xl'} flex={1} my={'12'} alignItems={'center'} justifyContent={'center'}>
             <Text fontSize={'3xl'} fontWeight={'bold'} textAlign={'center'}>Our Popular Menu</Text>
             <Text fontSize={'md'} mt={'4'} textColor={'gray.600'} textAlign={'center'}>Lorem ipsum dolor sit amet consectetur adipisicing elit.  </Text>
 
@@ -40,6 +40,7 @@ const OurMenuSection = () => {
                     ))
                 }
             </Flex>
+            <Button mt={'8'} bg={'orange.400'} rounded={'full'} color={'white'} mx={'auto'} fontWeight={'bold'}>More Menu</Button>
         </Container>
     )
 }

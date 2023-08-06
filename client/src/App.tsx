@@ -19,6 +19,8 @@ import Contact from "./pages/Contact"
 import '@fontsource-variable/outfit';
 
 import { extendTheme } from "@chakra-ui/react"
+import Signup from "./pages/Signup"
+import Login from "./pages/Login"
 
 // 2. Call `extendTheme` and pass your custom values
 const appTheme = extendTheme({
@@ -49,9 +51,10 @@ const appTheme = extendTheme({
 
 export const App = () => (
   <ChakraProvider theme={appTheme}>
-    <Navbar />
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
     </Routes>
