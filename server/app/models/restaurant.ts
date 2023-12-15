@@ -1,18 +1,18 @@
 import mongoose, { Schema } from "mongoose";
 
-interface IRestaurant {
+export interface IRestaurant extends Document {
     name: string,
     email: string,
     phone: string,
-    address: string,
+    address: mongoose.Types.ObjectId,
     password: string,
     avatar: string,
     veg: boolean,
     description: string,
-    hours: string,
+    opens: string,
+    closes: string,
     rating: number,
 }
-
 
 const restaurantSchema = new Schema<IRestaurant>({
     name: {
@@ -27,7 +27,9 @@ const restaurantSchema = new Schema<IRestaurant>({
         type: String,
         required: true
     },
-
+    address: {
+        type: Schema.Types.ObjectId
+    },
     password: {
         type: String,
         required: true
@@ -44,15 +46,16 @@ const restaurantSchema = new Schema<IRestaurant>({
         type: String,
         required: true
     },
-    hours: {
-        type: String,
-        required: true
+    opens: {
+        type: String
+    },
+    closes: {
+        type: String
     },
     rating: {
         type: Number,
         default: 0
     },
-
 });
 
 export default mongoose.model<IRestaurant>('Restaurant', restaurantSchema);

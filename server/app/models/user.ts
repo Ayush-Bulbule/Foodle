@@ -1,6 +1,8 @@
 import mongoose, { Schema, Document } from 'mongoose';
+import { IAddress } from './address';
 
 export interface IUser extends Document {
+    _id: Schema.Types.ObjectId;
     name: string;
     email: string;
     password: string;
@@ -9,9 +11,10 @@ export interface IUser extends Document {
     address: string;
     phone: string;
     otp: string;
+    refreshToken: Array<string>
 }
 
-const user: Schema = new Schema({
+const userSchema: Schema = new Schema({
     name: {
         type: String,
         required: true,
@@ -30,7 +33,7 @@ const user: Schema = new Schema({
     },
     address: {
         type: String,
-        required: true,
+        ref: 'Address'
     },
     phone: {
         type: String,
@@ -52,7 +55,8 @@ const user: Schema = new Schema({
         type: String,
         default: ""
     },
+    refreshToken: [String]
+
 }, { timestamps: true });
 
-
-export default mongoose.model<IUser>('User', user);
+export default mongoose.model<IUser>('User', userSchema);

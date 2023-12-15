@@ -1,7 +1,6 @@
-import { Schema } from "inspector";
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-interface IProduct {
+interface IMenuItem {
     name: string;
     image: string;
     price: number;
@@ -11,9 +10,10 @@ interface IProduct {
     rating: number;
     numReviews: number;
     countInStock: number;
+    restaurant: mongoose.Types.ObjectId;
 }
 
-const productSchema = new mongoose.Schema<IProduct>({
+const menuItemSchema = new mongoose.Schema<IMenuItem>({
     name: {
         required: true,
         type: String
@@ -51,8 +51,11 @@ const productSchema = new mongoose.Schema<IProduct>({
     countInStock: {
         default: 0,
         type: Number
+    },
+    restaurant: {
+        type: Schema.Types.ObjectId
     }
 })
 
 
-export default mongoose.model<IProduct>("Product", productSchema);
+export default mongoose.model<IMenuItem>("MenuItem", menuItemSchema);

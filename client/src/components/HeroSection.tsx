@@ -1,7 +1,19 @@
 import { Box, Container, Image, Text, Button } from '@chakra-ui/react'
 import React from 'react'
-
+import api from '../api/api'
 const HeroSection = () => {
+
+    const handleGetStarted = () => {
+        try {
+
+            api.get('api/getUsers').then(res => console.log(res)
+            )
+        } catch (err) {
+            console.log("Errr", err)
+        }
+        console.log('Get Started')
+    }
+
     return (
         <Container maxW="container.xl">
             {/* Your content goes here */}
@@ -13,7 +25,7 @@ const HeroSection = () => {
                     </Text>
                     <Text fontSize={'md'} mr={'18'}>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eaque possimus id, accusantium saepe?</Text>
 
-                    <Button fontWeight={'bold'} rounded={'full'} mt={'8'} backgroundColor={'orange.400'}>Get Started</Button>
+                    <Button onClick={handleGetStarted} fontWeight={'bold'} rounded={'full'} mt={'8'} backgroundColor={'orange.400'}>Get Started</Button>
                 </Box>
                 <Box flex="1" p={4} backgroundColor="white">
                     {/* Content for the right half */}

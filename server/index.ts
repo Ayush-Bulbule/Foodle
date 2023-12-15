@@ -4,16 +4,18 @@ import dotenv from 'dotenv';
 import connectDB from './app/config/db';
 import router from './routes/routes';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 
 const app: Express = express();
 connectDB();
 
 //middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 app.use(bodyParser.urlencoded({ extended: false }));
 // Parse JSON data
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 dotenv.config();
 

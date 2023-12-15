@@ -1,21 +1,78 @@
-import { Box, Container, Flex, Text, Image, Button, Grid, FormControl, FormLabel, Input, Textarea } from '@chakra-ui/react'
-import { FaArrowAltCircleLeft, FaArrowCircleLeft, FaArrowLeft } from 'react-icons/fa'
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { Box, Container, Flex, Text, Image, Button, Grid, FormControl, FormLabel, Input, Textarea, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { FaArrowLeft } from 'react-icons/fa'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { HiOutlineEye, HiOutlineEyeSlash } from 'react-icons/hi2'
+import { Toaster, toast } from 'react-hot-toast'
+
+import { loginUser } from '../api/auth';
+import { useAuth } from '../store/auth/AuthContext'
+
 
 const Login = () => {
-    return (
-        <Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }} gap={4} maxH={'100vh'} alignItems={"center"} justifyContent={"center"} h={'full'} >
 
-            <Box flex="1" order={{ base: 2, md: 1 }}>
+    const navigate = useNavigate();
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [show, setShow] = useState(false);
+    const [data, setData] = useState('');
+
+
+    const auth = useAuth();
+    const setAuthUser = auth?.setAuthUser;
+    const setIsLoggedIn = auth?.setIsLoggedIn;
+
+
+
+    function isValidEmail(email: string) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    const handleSubmit = async () => {
+        if (!email || !password) {
+            toast.error('Please fill all the fields');
+        }
+        if (!isValidEmail(email)) {
+            toast.error('Please enter a valid email');
+        }
+        try {
+            const data = await loginUser(email, password);
+
+            console.log("LOGIN DATA")
+            console.log(data);
+            if (data.UserInfo) {
+                setAuthUser(data.UserInfo);
+                setIsLoggedIn(true);
+                toast.success('Logged in successfully');
+                navigate('/');
+            }
+        } catch (err) {
+            toast.error('Invalid credentials');
+        }
+    }
+
+
+
+
+    return (
+        <Flex>
+
+
+            <Box w={'50%'} order={{ base: 2, md: 1 }}>
+                <Toaster
+                    position="top-center"
+                    reverseOrder={false}
+                />
                 {/* Content for the right half */}
                 <Button rounded={'full'} bg={'orange'} shadow={'md'} color={'white'} position={'absolute'} top={'10'} left={'10'}>
                     <Link to={'/'} ><FaArrowLeft /></Link>
                 </Button>
-                <Image src={`./assets/login-3.jpg`} h={'full'} alt="Hero" maxH={'100vh'} ml={0} />
-
+                <Image src={`./assets/login-3.jpg`} h={'full'} alt="Hero" objectFit={'cover'} maxH={'100vh'} ml={0} />
             </Box>
-            <Box flex="1" order={{ base: 1, md: 2 }} py={'20'} pr={{ base: '', md: 48 }} px={{ base: '8' }} justifyContent={"center"} h={'full'}>
+
+            <Box flex="1" w={'50%'} order={{ base: 1, md: 2 }} py={'20'} pr={{ base: '', md: 48 }} px={{ base: '8' }} justifyContent={"center"} h={'full'}>
                 {/* Content for the left half */}
                 <Text fontSize="4xl" fontWeight="medium">
                     Signup to  <Text as="span" color={"orange.400"}>Foodle</Text>
@@ -25,19 +82,33 @@ const Login = () => {
                     <FormControl isRequired>
                         <Box >
                             <FormLabel>Email</FormLabel>
-                            <Input type='email' placeholder='ayush@gmail.com' />
+                            <Input value={email} onChange={(e) => { setEmail(e.target.value) }} rounded={12} type='email' placeholder='ayush@gmail.com' />
                         </Box>
                         <FormLabel mt={'8'}>Password </FormLabel>
-                        <Input type='password' placeholder='*****' />
+                        <InputGroup size="md">
+                            <Input
+                                onChange={(e) => { setPassword(e.target.value) }}
+                                value={password}
+                                pr="4.5rem"
+                                rounded={12}
+                                type={show ? "text" : "password"}
+                                placeholder="Enter password"
+                            />
+                            <InputRightElement width="4.5rem" onClick={() => setShow(show ? false : true)} cursor={'pointer'}>
+                                {show ? <HiOutlineEyeSlash /> : <HiOutlineEye />}
+                            </InputRightElement>
+                        </InputGroup>
                     </FormControl>
+
                 </Box>
-                <Flex mt={'8'} alignItems={'center'}>
-                    <Button fontWeight={'bold'} px={'8'} rounded={'full'} mr={6} backgroundColor={'orange.400'}>Login</Button>
+                <Flex w={'1/2'} mt={'8'} alignItems={'center'}>
+                    <Button onClick={handleSubmit} fontWeight={'bold'} px={'8'} rounded={'full'} mr={6} backgroundColor={'orange.400'}>Login</Button>
                     <Link to='/signup'>Don't have an account?<Text as="span" color={'orange.500'}> SignUp</Text></Link>
                 </Flex>
             </Box>
 
-        </Grid>
+        </Flex>
+
     )
 }
 
