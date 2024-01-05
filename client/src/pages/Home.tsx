@@ -3,6 +3,7 @@ import React from 'react'
 import HeroSection from '../components/HeroSection'
 import OurMenuSection from '../components/OurMenuSection'
 import Navbar from '../components/Navbar'
+import RestaurantsList from '../components/RestaurantsList'
 
 const Home = () => {
     return (
@@ -13,6 +14,8 @@ const Home = () => {
                 <HeroSection />
                 {/* Our Menu */}
                 <OurMenuSection />
+                {/* Restairants */}
+                <RestaurantsList />
                 <h1>Home</h1>
             </Box>
         </>
