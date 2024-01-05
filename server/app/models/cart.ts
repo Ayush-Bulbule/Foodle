@@ -12,6 +12,7 @@ export interface ICart extends Document {
 
 const cartSchema = new mongoose.Schema<ICart>({
     user: {
+        ref: "User",
         type: Schema.Types.ObjectId,
         required: true
     },

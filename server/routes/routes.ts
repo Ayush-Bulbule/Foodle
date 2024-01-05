@@ -2,7 +2,7 @@ import express from 'express'
 import * as authController from '../app/controllers/authController'
 import * as menuController from '../app/controllers/menuController'
 import * as restaurantController from '../app/controllers/restaurantController'
-import * as homeController from '../app/controllers/cartController'
+import * as userController from '../app/controllers/cartController'
 import store from '../app/middlewares/multeradd';
 import { authMiddleware } from '../app/middlewares/auth'
 const router = express.Router()
@@ -28,8 +28,10 @@ router.get('/getMenuFromRestaurant', menuController.getMenuFromRestaurant)
 router.post('/addMenu', authMiddleware, store.single('image'), menuController.addMenu)
 
 //Protected Routes
-router.get('/getUsers', authMiddleware, homeController.getUsers);
-router.post('/addCart', authMiddleware, homeController.addCart);
+router.get('/getUsers', authMiddleware, userController.getUsers);
+router.get('/getCart', authMiddleware, userController.getCart);
+router.delete('/deleteCart', authMiddleware, userController.deleteCart);
+router.post('/addToCart', authMiddleware, userController.addCart);
 
 
 

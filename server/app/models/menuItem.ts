@@ -6,6 +6,7 @@ interface IMenuItem {
     price: number;
     description: string;
     veg: boolean;
+    serving: number;
     category: string;
     restaurant: mongoose.Types.ObjectId;
 }
@@ -30,6 +31,10 @@ const menuItemSchema = new mongoose.Schema<IMenuItem>({
     veg: {
         required: true,
         type: Boolean
+    },
+    serving: {
+        required: true,
+        type: Number
     },
     category: {
         required: true,
