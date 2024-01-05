@@ -4,12 +4,9 @@ interface IMenuItem {
     name: string;
     image: string;
     price: number;
+    description: string;
     veg: boolean;
     category: string;
-    description: string;
-    rating: number;
-    numReviews: number;
-    countInStock: number;
     restaurant: mongoose.Types.ObjectId;
 }
 
@@ -26,6 +23,10 @@ const menuItemSchema = new mongoose.Schema<IMenuItem>({
         required: true,
         type: Number
     },
+    description: {
+        required: true,
+        type: String
+    },
     veg: {
         required: true,
         type: Boolean
@@ -33,24 +34,6 @@ const menuItemSchema = new mongoose.Schema<IMenuItem>({
     category: {
         required: true,
         type: String
-    },
-    description: {
-        required: true,
-        type: String
-    },
-    rating: {
-        required: true,
-        default: 0,
-        type: Number
-    },
-    numReviews: {
-        required: true,
-        default: 0,
-        type: Number
-    },
-    countInStock: {
-        default: 0,
-        type: Number
     },
     restaurant: {
         type: Schema.Types.ObjectId

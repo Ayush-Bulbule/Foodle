@@ -3,20 +3,26 @@ import mongoose, { Schema } from "mongoose";
 export interface IRestaurant extends Document {
     name: string,
     email: string,
+    owner: mongoose.Types.ObjectId,
     phone: string,
     address: mongoose.Types.ObjectId,
-    password: string,
-    avatar: string,
+    image: string,
     veg: boolean,
     description: string,
     opens: string,
     closes: string,
     rating: number,
+    cuisine: [string]
 }
 
 const restaurantSchema = new Schema<IRestaurant>({
     name: {
         type: String,
+        required: true
+    },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
     email: {
@@ -30,11 +36,7 @@ const restaurantSchema = new Schema<IRestaurant>({
     address: {
         type: Schema.Types.ObjectId
     },
-    password: {
-        type: String,
-        required: true
-    },
-    avatar: {
+    image: {
         type: String,
         required: true
     },
@@ -56,6 +58,10 @@ const restaurantSchema = new Schema<IRestaurant>({
         type: Number,
         default: 0
     },
+    cuisine: {
+        type: [String],
+        default: []
+    }
 });
 
 export default mongoose.model<IRestaurant>('Restaurant', restaurantSchema);

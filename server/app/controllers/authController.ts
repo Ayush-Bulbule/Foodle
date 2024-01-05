@@ -89,10 +89,13 @@ export const login = async (req: Request, res: Response) => {
 
         res.cookie('accessToken', accessToken, {
             secure: false,
-            maxAge: 1000 * 20,
+            maxAge: 1000 * 60 * 60,//1hr
+
         });
 
         console.log("Login  Successfull")
+        //Store the token
+        tokenService.storeRefreshToken(foundUser._id, refreshToken);
 
         //!!remove token from response later
         return res.status(200).json({ "UserInfo": { id: foundUser._id, name: foundUser.name, email: foundUser.email, phone: foundUser.phone }, "accessToken": accessToken, "refreshToken": refreshToken });

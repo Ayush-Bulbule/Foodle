@@ -1,42 +1,84 @@
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt';
 import Restaurant from '../models/restaurant';
+import { AuthenticatedRequest } from '../types/appRequests';
+import User from '../models/user';
+
+// GET:  All Restaurants.
+export const getRestaurants = async (req: Request, res: Response) => {
+    try {
+        const restaurents = await Restaurant.find();
+        return res.status(200).json({ restaurents });
+    } catch (err) {
+        return res.status(500).json({ msg: err })
+    }
+}
+
+// GET:  Top Restaurants.
+export const getTopRestaurants = async (req: Request, res: Response) => {
+    try {
+        const restaurants = await Restaurant.find().sort({ rating: -1 }).limit(8);
+
+        res.status(200).json({ restaurants });
+    } catch (err) {
+        res.status(500).json({ msg: err })
+    }
+}
+
+// GET: Restaurant By Id
+export const getRestaurantById = async (req: Request, res: Response) => {
+    try {
+        const id = req.query.id;
+        if (!id) {
+            return res.status(400).send("Please provide id");
+        }
+        const restaurant = await Restaurant.findById(id);
+
+        return res.status(200).json({ restaurant });
+    } catch (err) {
+        res.status(500).json({ msg: err })
+    }
+}
 
 
-// name: string,
-// email: string,
-// phone: string,
-// address: mongoose.Types.ObjectId,
-// password: string,
-// avatar: string,
-// veg: boolean,
-// description: string,
-// opens: Date,
-// closes: Date,
-// rating: number,
+// POST:  Add a Restaurant.
+export const addRestaurent = async (req: AuthenticatedRequest, res: Response) => {
+    //Extract the User Role
+    const id = req.user?._id;
+    const user = await User.findById(id);
+    // console.log("🔴USER Res");
+    // console.log(id);
+    // console.log(user);
 
-export const addRestaurent = async (req: Request, res: Response) => {
-    let { name, email, phone, password, avatar, veg, description, opens, closes } = req.body;
-    if (!name || !email || !phone || !password || !veg || !description || !opens || !closes) {
+    //Check User
+    if (!user) {
+        return res.status(404).send("User not found");
+    }
+    if (user.role !== 'owner') {
+        return res.status(401).send("You are not a restaurant owner");
+    }
+
+    //Extract the data from req.body
+    let { name, email, phone, image, veg, description, opens, closes, cuisine } = req.body;
+    console.log("Restaurant Data");
+    console.log(req.body);
+    if (!name || !email || !phone || image || !veg || !description || !opens || !closes || !cuisine) {
         return res.status(400).send("Please fill all the details!!");
     }
     //If All Are correct insert it to DB
-    if (!avatar) {
-        avatar = `https://ui-avatars.com/api/?name=${name}`
-    }
+
     //Hash Password
-    const saltRounds = 8;
-    const hashedPassword = bcrypt.hash(password, saltRounds)
     const restaurant = new Restaurant({
         name,
         email,
+        owner: id,
         phone,
-        password,
-        avatar,
+        image: req.file?.filename || "https://source.unsplash.com/featured/?indian%20restaurant",
         veg,
         description,
         opens,
-        closes
+        closes,
+        cuisine
     });
 
     try {

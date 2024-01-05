@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import * as tokenService from '../services/tokenService';
+import { AuthenticatedRequest } from '../types/appRequests';
 
-
-export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+export const authMiddleware = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     //Auth Logic Here
     try {
         const { accessToken } = req.cookies;
@@ -17,6 +17,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
             return res.status(401).json({ msg: "You are not authenticated to aceess!!" })
         }
         console.log("PASSED MIDDLEWARE");
+        console.log(userData);
         (req as any).user = userData;
         next();
 

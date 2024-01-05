@@ -45,15 +45,14 @@ const userSchema: Schema = new Schema({
         type: String,
         default: "https://cdn-icons-png.flaticon.com/512/599/599305.png"
     },
-    role: {
-        type: String,
-        trim: true,
-        default: "customer",
-        maxlength: 32
-    },
     otp: {
         type: String,
         default: ""
+    },
+    role: {
+        type: String,
+        default: "customer",
+        enum: ["customer", "owner", "rider"]
     },
     refreshToken: [String]
 

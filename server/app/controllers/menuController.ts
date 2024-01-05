@@ -1,18 +1,58 @@
 import mongoose, { Schema } from 'mongoose';
 import { Request, Response } from 'express';
 import Menu from '../models/menuItem';
-// name: string;
-//     image: string;
-//     price: number;
-//     veg: boolean;
-//     category: string;
-//     description: string;
-//     rating: number;
-//     numReviews: number;
-//     countInStock: number;
-//     restaurant: mongoose.Types.ObjectId;
-export const addMenu = async (req: Request, res: Response) => {
-    let { name, price, veg, category, description, rating, numReviews, countInStock, restaurant } = req.body;
+import { AuthenticatedRequest } from '../types/appRequests';
+
+
+// GET: Get All Menu
+export const getAllMenu = async (req: Request, res: Response) => {
+    try {
+        const menu = await Menu.find();
+        res.json(menu);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+}
+
+// GET: Get All Menu From Restaurant 
+export const getMenuFromRestaurant = async (req: Request, res: Response) => {
+    try {
+        const menu = await Menu.find({ restaurant: req.params.id });
+
+        if (menu.length === 0) {
+            return res.status(404).json({ msg: "No menu found" });
+        }
+        return res.status(200).json({ menu });
+    } catch (err) {
+        return res.status(500).json({ error: err });
+    }
+}
+
+// GET:  Menu By Id
+export const getMenuById = async (req: Request, res: Response) => {
+    try {
+        const menu = await Menu.findById(req.params.id);
+        console.log(req.params.id)
+
+        if (!menu) {
+            return res.status(404).json({ msg: "No menu found" });
+        }
+        return res.status(200).json({ menu });
+    } catch (err) {
+        return res.status(500).json({ error: err });
+    }
+}
+
+
+// POST: AddMenu
+export const addMenu = async (req: AuthenticatedRequest, res: Response) => {
+
+    const id = req.user?._id;
+
+    if (!id) {
+        return res.status(401).send("You are not a restaurant owner");
+    }
+    let { name, price, veg, category, description, restaurant } = req.body;
 
     console.log(req.body);
     if (!name || !price || !veg || !category || !description || !restaurant) {
@@ -26,36 +66,12 @@ export const addMenu = async (req: Request, res: Response) => {
             price,
             veg,
             category,
-            description,
-            rating,
-            numReviews,
-            countInStock,
             restaurant
         });
 
         const savedMenu = await newMenu.save();
-        res.json(savedMenu);
+        return res.json(savedMenu);
     } catch (err) {
-        res.status(500).json({ error: err });
-    }
-}
-
-//Get All Menu
-export const getAllMenu = async (req: Request, res: Response) => {
-    try {
-        const menu = await Menu.find();
-        res.json(menu);
-    } catch (err) {
-        res.status(500).json({ error: err });
-    }
-}
-
-//get 
-export const getMenuByRestaurant = async (req: Request, res: Response) => {
-    try {
-        const menu = await Menu.find({ restaurant: req.params.id });
-        res.json(menu);
-    } catch (err) {
-        res.status(500).json({ error: err });
+        return res.status(500).json({ error: err });
     }
 }

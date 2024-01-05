@@ -28,7 +28,7 @@ export const generateAccessToken = (payload: any) => {
 }
 
 // Method to store refresh token
-export const storeRefreshToken = async (token: string, userId: ObjectId) => {
+export const storeRefreshToken = async (userId: ObjectId, token: string) => {
     try {
         await Refresh.create({ token, userId });
     } catch (err) {
