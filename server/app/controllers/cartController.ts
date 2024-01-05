@@ -4,15 +4,21 @@ import { Request, Response } from 'express';
 import { AuthenticatedRequest } from '../types/appRequests';
 
 
-// GET: getUsers
-export const getUsers = async (req: AuthenticatedRequest, res: Response) => {
+
+// GET: getCart
+export const getCart = async (req: AuthenticatedRequest, res: Response) => {
     try {
-        const users = await User.find();
-        console.log("🔴USERS");
-        console.log(req.user._id);
-        return res.status(200).json({ users });
+        const user = req.user;
+
+        const cart = await Cart.findOne({ user: user?._id });
+        if (!cart) {
+            return res.status(404).send("Cart not found");
+        }
+
+        return res.status(200).json({ cart });
     } catch (err) {
         return res.status(500).json({ msg: err })
+
     }
 }
 
@@ -80,23 +86,7 @@ export const deleteCart = async (req: AuthenticatedRequest, res: Response) => {
     }
 }
 
-// GET: getCart
-export const getCart = async (req: AuthenticatedRequest, res: Response) => {
-    try {
-        const user = req.user;
 
-        const cart = await Cart.findOne({ user: user?._id });
-        if (!cart) {
-            return res.status(404).send("Cart not found");
-        }
 
-        return res.status(200).json({ cart });
-    } catch (err) {
-        return res.status(500).json({ msg: err })
-
-    }
-}
-
-// PUT: updateCart
 
 // DELETE: deleteCart

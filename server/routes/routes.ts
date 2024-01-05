@@ -2,7 +2,8 @@ import express from 'express'
 import * as authController from '../app/controllers/authController'
 import * as menuController from '../app/controllers/menuController'
 import * as restaurantController from '../app/controllers/restaurantController'
-import * as userController from '../app/controllers/cartController'
+import * as cartController from '../app/controllers/cartController'
+import * as userController from '../app/controllers/userController'
 import store from '../app/middlewares/multeradd';
 import { authMiddleware } from '../app/middlewares/auth'
 const router = express.Router()
@@ -28,10 +29,15 @@ router.get('/getMenuFromRestaurant', menuController.getMenuFromRestaurant)
 router.post('/addMenu', authMiddleware, store.single('image'), menuController.addMenu)
 
 //Protected Routes
-router.get('/getUsers', authMiddleware, userController.getUsers);
-router.get('/getCart', authMiddleware, userController.getCart);
-router.delete('/deleteCart', authMiddleware, userController.deleteCart);
-router.post('/addToCart', authMiddleware, userController.addCart);
+
+router.get('/getProfile', authMiddleware, userController.getProfile)
+router.put('/updateProfile', authMiddleware, userController.updateProfile)
+router.get('/getUsers', authMiddleware, userController.getUsers)
+
+//Cart Routes
+router.get('/getCart', authMiddleware, cartController.getCart)
+router.delete('/deleteCart', authMiddleware, cartController.deleteCart)
+router.post('/addToCart', authMiddleware, cartController.addCart)
 
 
 
