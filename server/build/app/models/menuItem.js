@@ -45,6 +45,10 @@ const menuItemSchema = new mongoose_1.default.Schema({
         required: true,
         type: Boolean
     },
+    serving: {
+        required: true,
+        type: Number
+    },
     category: {
         required: true,
         type: String

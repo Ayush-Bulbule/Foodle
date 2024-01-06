@@ -30,7 +30,8 @@ const express_1 = __importDefault(require("express"));
 const authController = __importStar(require("../app/controllers/authController"));
 const menuController = __importStar(require("../app/controllers/menuController"));
 const restaurantController = __importStar(require("../app/controllers/restaurantController"));
-const homeController = __importStar(require("../app/controllers/cartController"));
+const cartController = __importStar(require("../app/controllers/cartController"));
+const userController = __importStar(require("../app/controllers/userController"));
 const multeradd_1 = __importDefault(require("../app/middlewares/multeradd"));
 const auth_1 = require("../app/middlewares/auth");
 const router = express_1.default.Router();
@@ -52,6 +53,11 @@ router.get('/getAllMenu', menuController.getAllMenu);
 router.get('/getMenuFromRestaurant', menuController.getMenuFromRestaurant);
 router.post('/addMenu', auth_1.authMiddleware, multeradd_1.default.single('image'), menuController.addMenu);
 //Protected Routes
-router.get('/getUsers', auth_1.authMiddleware, homeController.getUsers);
-router.post('/addCart', auth_1.authMiddleware, homeController.addCart);
+router.get('/getProfile', auth_1.authMiddleware, userController.getProfile);
+router.put('/updateProfile', auth_1.authMiddleware, userController.updateProfile);
+router.get('/getUsers', auth_1.authMiddleware, userController.getUsers);
+//Cart Routes
+router.get('/getCart', auth_1.authMiddleware, cartController.getCart);
+router.delete('/deleteCart', auth_1.authMiddleware, cartController.deleteCart);
+router.post('/addToCart', auth_1.authMiddleware, cartController.addCart);
 exports.default = router;

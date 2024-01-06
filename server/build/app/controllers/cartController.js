@@ -12,21 +12,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addCart = exports.getUsers = void 0;
+exports.deleteCart = exports.addCart = exports.getCart = void 0;
 const cart_1 = __importDefault(require("../models/cart"));
 const user_1 = __importDefault(require("../models/user"));
-const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// GET: getCart
+const getCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield user_1.default.find();
-        console.log("🔴USERS");
-        console.log(req.user._id);
-        return res.status(200).json({ users });
+        const user = req.user;
+        const cart = yield cart_1.default.findOne({ user: user === null || user === void 0 ? void 0 : user._id });
+        if (!cart) {
+            return res.status(404).send("Cart not found");
+        }
+        return res.status(200).json({ cart });
     }
     catch (err) {
         return res.status(500).json({ msg: err });
     }
 });
-exports.getUsers = getUsers;
+exports.getCart = getCart;
+// POST: addToCart
 const addCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.user;
     console.log(user);
@@ -41,14 +45,21 @@ const addCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         // Await the result of Cart.findOne and ensure its type is ICart or null
         const cart = yield cart_1.default.findOne({ user: user._id });
+        console.log(cart);
         if (cart === null || cart === void 0 ? void 0 : cart.items) {
             const index = cart.items.findIndex((cartItem) => cartItem.item == item);
             if (index >= 0) {
-                cart.items[index].quantity += quantity;
+                console.log("Item already exists in cart incrementing quantity");
+                console.log(cart.items[index].quantity);
+                cart.items[index].quantity += Number(quantity);
             }
             else {
+                console.log("New item being added to cart");
                 cart === null || cart === void 0 ? void 0 : cart.items.push({ item, quantity });
             }
+            // Save the updated Cart
+            yield cart.save();
+            return res.status(200).json({ cart });
         }
         else {
             const newCart = new cart_1.default({
@@ -56,6 +67,26 @@ const addCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 items: [{ item, quantity }]
             });
             yield newCart.save();
+            return res.status(200).json({ newCart });
+        }
+    }
+    catch (err) {
+        return res.status(500).json({ msg: err });
+    }
+});
+exports.addCart = addCart;
+const deleteCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = req.user;
+        const { item } = req.body;
+        const cart = yield cart_1.default.findOne({ user: user === null || user === void 0 ? void 0 : user._id });
+        if (!cart) {
+            return res.status(404).send("Cart not found");
+        }
+        const index = cart.items.findIndex((cartIndex) => cartIndex.item == item);
+        if (index >= 0) {
+            cart.items.splice(index, 1); ///At index remove 1 element - splice***
+            yield cart.save();
         }
         return res.status(200).json({ cart });
     }
@@ -63,4 +94,5 @@ const addCart = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.status(500).json({ msg: err });
     }
 });
-exports.addCart = addCart;
+exports.deleteCart = deleteCart;
+// DELETE: deleteCart
