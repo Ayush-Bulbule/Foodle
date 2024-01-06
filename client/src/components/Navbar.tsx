@@ -2,12 +2,11 @@ import { Box, HStack, Flex, Text, Image, Link, Modal, ModalOverlay, ModalCloseBu
 import { Link as RouterLink } from 'react-router-dom'
 import { IoMdCart } from 'react-icons/io'
 import { FiSearch, FiUser } from "react-icons/fi"
-import { useAuth } from '../store/auth/AuthContext'
+import useAuth from '../hooks/useAuth'
 
 const Navbar = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const auth = useAuth();
-
     const isLoggedIn = auth?.isLoggedIn;
 
     return (
@@ -21,9 +20,9 @@ const Navbar = () => {
                     </HStack>
                     <Box display={{ base: 'none', md: 'flex' }} gap={6} alignItems={'center'} justifyContent={'center'} >
                         <Text fontSize={'lg'} fontWeight={'medium'} color={"gray.500"}><Link to="/" as={RouterLink}>Home</Link></Text>
-                        <Text fontSize={'lg'} fontWeight={'medium'} color={"gray.500"}><Link to="/" as={RouterLink}>Restraunts</Link></Text>
-                        <Text fontSize={'lg'} fontWeight={'medium'} color={"gray.500"}><Link to="/" as={RouterLink}>About</Link></Text>
-                        <Text fontSize={'lg'} fontWeight={'medium'} color={"gray.500"}><Link to="/" as={RouterLink}>Contact</Link></Text>
+                        <Text fontSize={'lg'} fontWeight={'medium'} color={"gray.500"}><Link to="/restaurants" as={RouterLink}>Restraunts</Link></Text>
+                        <Text fontSize={'lg'} fontWeight={'medium'} color={"gray.500"}><Link to="/about" as={RouterLink}>About</Link></Text>
+                        <Text fontSize={'lg'} fontWeight={'medium'} color={"gray.500"}><Link to="/contact" as={RouterLink}>Contact</Link></Text>
                     </Box>
                     <HStack gap={4}>
                         <Link as={RouterLink} onClick={() => onOpen()}><FiSearch size={24} /></Link>
@@ -31,15 +30,17 @@ const Navbar = () => {
 
                         {
                             isLoggedIn ?
-                                <IconButton
-                                    isRound={true}
-                                    variant='solid'
-                                    colorScheme='orange'
-                                    aria-label='Done'
-                                    fontSize='22px'
-                                    icon={<FiUser />}
+                                <Link href='/profile'>
+                                    <IconButton
+                                        isRound={true}
+                                        variant='solid'
+                                        colorScheme='orange'
+                                        aria-label='Done'
+                                        fontSize='22px'
+                                        icon={<FiUser />}
 
-                                />
+                                    />
+                                </Link>
                                 :
                                 <Button px={'6'} py={'2'} shadow={'xs'} variant='solid' bg={"orange.400"} textColor={"white"} rounded={"full"}>
                                     <Link as={RouterLink} to='/login'>Sīgn In</Link>

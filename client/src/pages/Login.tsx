@@ -1,29 +1,31 @@
 import { Box, Container, Flex, Text, Image, Button, Grid, FormControl, FormLabel, Input, Textarea, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { HiOutlineEye, HiOutlineEyeSlash } from 'react-icons/hi2'
 import { Toaster, toast } from 'react-hot-toast'
 
 import { loginUser } from '../api/auth';
-import { useAuth } from '../store/auth/AuthContext'
+import useAuth from '../hooks/useAuth'
 
 
 const Login = () => {
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const from = location.state?.from?.pathname || '/';
+    console.log(from);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [show, setShow] = useState(false);
     const [data, setData] = useState('');
 
-
     const auth = useAuth();
+    const authUser = auth?.authUser;
     const setAuthUser = auth?.setAuthUser;
     const setIsLoggedIn = auth?.setIsLoggedIn;
-
-
 
     function isValidEmail(email: string) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,24 +44,21 @@ const Login = () => {
 
             console.log("LOGIN DATA")
             console.log(data);
-            if (data.UserInfo) {
-                setAuthUser(data.UserInfo);
+            if (data.user) {
+                setAuthUser(data.user);
                 setIsLoggedIn(true);
                 toast.success('Logged in successfully');
-                navigate('/');
+
+                //from and replace are used to redirect the user to the page they were trying to access before logging in
+                navigate(from, { replace: true });
             }
         } catch (err) {
             toast.error('Invalid credentials');
         }
     }
 
-
-
-
     return (
         <Flex>
-
-
             <Box w={'50%'} order={{ base: 2, md: 1 }}>
                 <Toaster
                     position="top-center"
@@ -75,7 +74,7 @@ const Login = () => {
             <Box flex="1" w={'50%'} order={{ base: 1, md: 2 }} py={'20'} pr={{ base: '', md: 48 }} px={{ base: '8' }} justifyContent={"center"} h={'full'}>
                 {/* Content for the left half */}
                 <Text fontSize="4xl" fontWeight="medium">
-                    Signup to  <Text as="span" color={"orange.400"}>Foodle</Text>
+                    Login to  <Text as="span" color={"orange.400"}>Foodle</Text>
                 </Text>
                 <Text fontSize={'md'} mr={'8'}>Welcome to Foodle Food Delivery! Satisfy your cravings with just a few clicks.</Text>
                 <Box mt={14}>

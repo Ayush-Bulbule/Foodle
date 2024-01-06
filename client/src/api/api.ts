@@ -1,7 +1,8 @@
 import { original } from '@reduxjs/toolkit';
 import axios from 'axios'
 
-export const APP_API_URL = 'http://localhost:4000/'
+export const APP_API_URL = 'https://foodle-api.onrender.com/'
+// export const APP_API_URL = 'http://localhost:4000/'
 
 axios.defaults.withCredentials = true
 
@@ -29,7 +30,7 @@ api.interceptors.response.use(
             console.log("error 401  dd ")
             console.log(originalRequest)
             try {
-                await axios.get(APP_API_URL + 'api/refresh', { withCredentials: true })
+                await axios.get(APP_API_URL + '/refresh', { withCredentials: true })
                 return api.request(originalRequest);
             } catch (err) {
                 console.log(err)

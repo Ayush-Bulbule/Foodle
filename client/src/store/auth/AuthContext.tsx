@@ -1,5 +1,4 @@
-import { createContext, useContext, useState } from "react";
-
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType {
     authUser: any;
@@ -8,21 +7,16 @@ interface AuthContextType {
     setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AuthContext = createContext<AuthContextType>({
-    authUser: null,
+export const AuthContext = createContext<AuthContextType>({
+    authUser: {},
     setAuthUser: () => { },
     isLoggedIn: false,
     setIsLoggedIn: () => { }
 });
 
-export function useAuth() {
-    return useContext(AuthContext);
-}
-
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-    const [authUser, setAuthUser] = useState(null);
+    const [authUser, setAuthUser] = useState({});
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const value = {
@@ -31,6 +25,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoggedIn,
         setIsLoggedIn
     }
+    useEffect(() => {
+        // console.log("AUTH USER")
+        // console.log(authUser);
+        const authUser = localStorage.getItem('authUser');
+        if (authUser) {
+            setAuthUser(JSON.parse(authUser));
+            setIsLoggedIn(true);
+        }
+    }, [authUser])
+
 
     return (
         <AuthContext.Provider value={value}>

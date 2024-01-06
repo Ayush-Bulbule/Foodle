@@ -1,12 +1,13 @@
 import { Card, CardBody, Image, Stack, Heading, Text, } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { IRestaurant } from '../types/restaurant'
+import Loader from './Loader'
 
-const RestaurantCard<React.Props = ({ restaurant: IRestaurant }) => {
+const RestaurantCard: React.FC<IRestaurant> = (restaurant) => {
     return (
         <>
             {
-                (restaurant !== null) ?
+                restaurant ?
                     <Card maxW='xs' mt={5}>
                         <CardBody padding={0}>
                             <Image
@@ -25,6 +26,7 @@ const RestaurantCard<React.Props = ({ restaurant: IRestaurant }) => {
                             </Stack>
                         </CardBody>
                     </Card>
+                    : <p> ERRROR</p>
 
             }
 

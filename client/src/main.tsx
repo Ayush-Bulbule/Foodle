@@ -1,14 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
+import { ChakraProvider } from "@chakra-ui/react"
 import './index.css'
-import { BrowserRouter } from 'react-router-dom'
-import { ColorModeScript } from '@chakra-ui/react'
+import App from './App.tsx'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './store/auth/AuthContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>,
+      <AuthProvider>
+        <ChakraProvider>
+          <Routes>
+            <Route path="/*" element={<App />} />
+          </Routes>
+        </ChakraProvider>
+      </AuthProvider>
+    </BrowserRouter >
+  </React.StrictMode >,
 )

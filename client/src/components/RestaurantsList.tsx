@@ -1,27 +1,27 @@
 import RestaurantCard from './RestaurantCard';
 import { Container, Text, Flex } from '@chakra-ui/react';
-import { getRestaurant } from '../api/restaurantApi'
+import { getTopRestaurants } from '../api/restaurantApi'
 import { useEffect, useState } from 'react';
-import Loading from './Loading';
+import Loader from './Loader';
+import { IRestaurant } from '../types/restaurant';
 
 
 const RestaurantsList = () => {
-    const [restaurants, setRestaurants] = useState([null])
+    const [restaurants, setRestaurants] = useState<IRestaurant[]>([])
 
     useEffect(() => {
         const fetchRestaurants = async () => {
             try {
-                const data = await getRestaurant()
-                setRestaurants(data)
-                console.log(data)
+                const data = await getTopRestaurants()
+                setRestaurants(data.restaurants)
+                console.log('⚡Restaurants')
+                console.log(data.restaurants)
             } catch (err) {
                 console.log(err)
             }
         }
-
         fetchRestaurants();
     }, []);
-
 
     return (
         <>
@@ -35,10 +35,10 @@ const RestaurantsList = () => {
 
                 <Flex flexWrap={'wrap'} gap={10} mt={'8'} alignItems={'center'} justifyContent={'center'}>
                     {
-                        (restaurants !== null) ? restaurants.map((restaurant, index) => (
-                            <RestaurantCard key={index} restaurant={restaurant} />
+                        restaurants ? restaurants.map((restaurant, index) => (
+                            <RestaurantCard key={index} {...restaurant} />
                         )) :
-                            <Loading />
+                            <Loader />
                     }
                 </Flex>
             </Container>
