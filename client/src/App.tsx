@@ -14,6 +14,7 @@ import NotFound from "./pages/NotFound";
 import RequireAuth from "./pages/RequireAuth";
 import Collection from "./pages/owner/Collection";
 import Dashboard from "./pages/owner/Dashboard";
+import RestaurantDetails from "./pages/RestaurantDetails";
 
 
 export const App = () => (
@@ -24,6 +25,7 @@ export const App = () => (
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       <Route path="/about" element={<About />} />
+      <Route path="restaurant/:id" element={<RestaurantDetails />} />
       <Route path="/contact" element={<Contact />} />
 
 

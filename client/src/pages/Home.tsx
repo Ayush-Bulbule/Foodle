@@ -10,7 +10,7 @@ const Home = () => {
         <>
             <Navbar />
 
-            <Box flex={1} alignItems={"center"} justifyContent={"center"} >
+            <Box paddingTop={'16'} flex={1} alignItems={"center"} justifyContent={"center"} >
                 <HeroSection />
                 {/* Our Menu */}
                 <OurMenuSection />
