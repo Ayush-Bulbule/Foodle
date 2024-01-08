@@ -1,6 +1,6 @@
 import { Card, CardBody, Image, Stack, Heading, Text, } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { IRestaurant } from '../types/restaurant'
+import { IRestaurant } from '../types'
 import Loader from './Loader'
 
 const RestaurantCard: React.FC<IRestaurant> = (restaurant) => {

@@ -4,7 +4,7 @@ import { ChakraProvider } from "@chakra-ui/react"
 import './index.css'
 import App from './App.tsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { AuthProvider } from './store/auth/AuthContext.tsx'
+import { AuthProvider } from './context/AuthProvider.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

@@ -7,7 +7,7 @@ import useAuth from '../hooks/useAuth'
 const Navbar = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const auth = useAuth();
-    const isLoggedIn = auth?.isLoggedIn;
+    const isLoggedIn = auth?.user;
 
     return (
         <>
@@ -24,13 +24,13 @@ const Navbar = () => {
                         <Text fontSize={'lg'} fontWeight={'medium'} color={"gray.500"}><Link to="/about" as={RouterLink}>About</Link></Text>
                         <Text fontSize={'lg'} fontWeight={'medium'} color={"gray.500"}><Link to="/contact" as={RouterLink}>Contact</Link></Text>
                     </Box>
-                    <HStack gap={4}>
+                    <HStack gap={4} key={auth?.user?.id}>
                         <Link as={RouterLink} onClick={() => onOpen()}><FiSearch size={24} /></Link>
                         <Link as={RouterLink} to="/" display={{ base: 'none', md: 'block' }}><IoMdCart size={24} /></Link>
 
                         {
                             isLoggedIn ?
-                                <Link href='/profile'>
+                                <Link as={RouterLink} to='/profile'>
                                     <IconButton
                                         isRound={true}
                                         variant='solid'
@@ -46,8 +46,6 @@ const Navbar = () => {
                                     <Link as={RouterLink} to='/login'>Sīgn In</Link>
                                 </Button>
                         }
-
-
                     </HStack>
                 </Flex>
             </Box>

@@ -1,12 +1,13 @@
-import { Box, Container, Flex, Text, Image, Button, Grid, FormControl, FormLabel, Input, Textarea, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { Box, Link, Flex, Text, Image, Button, Grid, FormControl, FormLabel, Input, Textarea, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useState } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link as ReactRouterLink, useNavigate, useLocation } from 'react-router-dom'
 import { HiOutlineEye, HiOutlineEyeSlash } from 'react-icons/hi2'
 import { Toaster, toast } from 'react-hot-toast'
 
 import { loginUser } from '../api/auth';
 import useAuth from '../hooks/useAuth'
+import { IUser } from '../types'
 
 
 const Login = () => {
@@ -23,9 +24,8 @@ const Login = () => {
     const [data, setData] = useState('');
 
     const auth = useAuth();
-    const authUser = auth?.authUser;
-    const setAuthUser = auth?.setAuthUser;
-    const setIsLoggedIn = auth?.setIsLoggedIn;
+    const authUser = auth?.user;
+    const setAuthUser = auth?.setUser;
 
     function isValidEmail(email: string) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -45,10 +45,11 @@ const Login = () => {
             console.log("LOGIN DATA")
             console.log(data);
             if (data.user) {
-                setAuthUser(data.user);
-                setIsLoggedIn(true);
+                const user: IUser = data.user;
+                setAuthUser(user);
+                console.log("Auth")
+                console.log(authUser);
                 toast.success('Logged in successfully');
-
                 //from and replace are used to redirect the user to the page they were trying to access before logging in
                 navigate(from, { replace: true });
             }
@@ -65,9 +66,9 @@ const Login = () => {
                     reverseOrder={false}
                 />
                 {/* Content for the right half */}
-                <Button rounded={'full'} bg={'orange'} shadow={'md'} color={'white'} position={'absolute'} top={'10'} left={'10'}>
-                    <Link to={'/'} ><FaArrowLeft /></Link>
-                </Button>
+                <Link as={ReactRouterLink} to="/" p={'4'} fontSize={'xl'} rounded={'full'} bg={'orange'} shadow={'md'} color={'white'} position={'absolute'} top={'10'} left={'10'}>
+                    <FaArrowLeft />
+                </Link>
                 <Image src={`./assets/login-3.jpg`} h={'full'} alt="Hero" objectFit={'cover'} maxH={'100vh'} ml={0} />
             </Box>
 
@@ -106,7 +107,7 @@ const Login = () => {
                 </Flex>
             </Box>
 
-        </Flex>
+        </Flex >
 
     )
 }

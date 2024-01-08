@@ -1,12 +1,12 @@
 import { Box, Container, Image, Text, Button } from '@chakra-ui/react'
 import React from 'react'
-import api from '../api/api'
+import axios from '../api/api'
 const HeroSection = () => {
 
     const handleGetStarted = () => {
         try {
 
-            api.get('api/getUsers').then(res => console.log(res)
+            axios.get('api/getUsers').then(res => console.log(res)
             )
         } catch (err) {
             console.log("Errr", err)

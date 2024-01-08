@@ -3,7 +3,7 @@ import { Container, Text, Flex } from '@chakra-ui/react';
 import { getTopRestaurants } from '../api/restaurantApi'
 import { useEffect, useState } from 'react';
 import Loader from './Loader';
-import { IRestaurant } from '../types/restaurant';
+import { IRestaurant } from '../types';
 
 
 const RestaurantsList = () => {
