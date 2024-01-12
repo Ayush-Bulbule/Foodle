@@ -1,17 +1,21 @@
 import { Box, Container, Image, Text, Button } from '@chakra-ui/react'
 import React from 'react'
-import axios from '../api/api'
+import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import api from '../api/api'
+import axios from 'axios'
+
 const HeroSection = () => {
 
-    const handleGetStarted = () => {
+    const handleGetStarted = async () => {
         try {
-
-            axios.get('api/getUsers').then(res => console.log(res)
-            )
+            const response = await axios.get('http://localhost:4000/api/getUsers', {
+                withCredentials: true
+            });
+            console.log("Data:", response.data);
         } catch (err) {
-            console.log("Errr", err)
+            console.error("Error:", err);
         }
-        console.log('Get Started')
+        console.log('Get Started');
     }
 
     return (

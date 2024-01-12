@@ -12,7 +12,7 @@ const OurMenuSection = () => {
                 // Assuming getMenu is a function that fetches the menu data
                 const data = await getMenu();
                 setMenuData(data);
-                console.log(data);
+                // console.log(data);
             } catch (err) {
                 console.log(err);
             }
@@ -33,7 +33,7 @@ const OurMenuSection = () => {
             <Flex flexWrap={'wrap'} mt={'8'} alignItems={'center'} justifyContent={'center'}>
                 {/* Render your menu items here */}
                 {menuData.map((menuItem, index) => (
-                    <MenuCard key={index} title={menuItem.name} desc={menuItem.desc} img={menuItem.image} />
+                    <MenuCard key={index} title={menuItem?.name} desc={menuItem?.desc} img={menuItem?.image} />
                 ))}
             </Flex>
             <Button mt={'8'} bg={'orange.400'} rounded={'full'} color={'white'} mx={'auto'} fontWeight={'bold'}>

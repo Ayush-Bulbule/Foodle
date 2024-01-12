@@ -6,13 +6,12 @@ interface Props {
 }
 
 const RequireAuth: React.FC<Props> = ({ allowedRoles }) => {
-    const auth = useAuth();
+    const auth = useAuth()?.auth;
     const user = auth?.user;
 
     const location = useLocation();
-    console.log("AUTH USER")
+    console.log("Required Auth - AUTH USER")
     console.log(user);
-
 
     return (
         user && allowedRoles.includes(user?.role)

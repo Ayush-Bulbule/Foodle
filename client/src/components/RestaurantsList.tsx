@@ -14,8 +14,6 @@ const RestaurantsList = () => {
             try {
                 const data = await getTopRestaurants()
                 setRestaurants(data.restaurants)
-                console.log('⚡Restaurants')
-                console.log(data.restaurants)
             } catch (err) {
                 console.log(err)
             }

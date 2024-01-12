@@ -28,11 +28,3 @@ yarn-debug.log*
 yarn-error.log*
 
 
-# ignore local build
-/client/build
-/server/build
-
-
-
-./server/build
-./server/build

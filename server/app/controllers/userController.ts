@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import * as tokenService from '../services/tokenService';
 
 import User from "../models/user";
 import { AuthenticatedRequest } from "../types/appRequests";
@@ -7,11 +8,48 @@ import { AuthenticatedRequest } from "../types/appRequests";
 export const getUsers = async (req: AuthenticatedRequest, res: Response) => {
     try {
         const users = await User.find();
+
+        res.cookie('eshop', 'eshop', {
+            maxAge: 1000 * 60 * 60 * 24 * 365,
+        });
         console.log("🔴USERS");
-        console.log(req.user._id);
+        // // console.log(req.user._id);
+        // const accessToken = tokenService.generateAccessToken({ _id: '6597e2d76114e27efaa59c67' });
+        // //send new access token as response
+        // res.cookie('accessToken', accessToken, {
+        //     secure: false,
+        //     maxAge: 1000 * 20,
+        // });
+        //-
+        const { accessToken, refreshToken } = await tokenService.generateToken({ _id: '6597e2d76114e27efaa59c67' });
+
+        console.log("🔴TOKENS: ")
+        console.log(accessToken);
+        console.log(refreshToken);
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false,
+            maxAge: 1000 * 20, // 7d
+        });
+
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: false,
+            maxAge: 1000 * 60 * 60,//1hr
+
+        });
+
+        res.cookie("test", "test", {
+            secure: false,
+            maxAge: 1000 * 20,
+        });
+
         return res.status(200).json({ users });
     } catch (err) {
-        return res.status(500).json({ msg: err })
+        console.log("Errror: ")
+        console.log(err)
+        return res.status(500).json({ msg: err });
     }
 }
 

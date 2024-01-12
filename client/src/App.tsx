@@ -12,39 +12,58 @@ import { Layout } from "./pages/Layout";
 import NotFound from "./pages/NotFound";
 
 import RequireAuth from "./pages/RequireAuth";
-import Collection from "./pages/owner/Collection";
+import Collection from "./pages/owner/Earnings";
 import Dashboard from "./pages/owner/Dashboard";
 import RestaurantDetails from "./pages/RestaurantDetails";
+import PersistLogin from "./pages/PersistLogin";
+import Earnings from "./pages/owner/Earnings";
+import ManageOrders from "./pages/owner/ManageOrders";
+import AddMenu from "./pages/owner/AddMenu";
+import RestaurantProfile from "./pages/owner/RestaurantProfile";
+import Orders from "./pages/Orders";
 
 
 export const App = () => (
   <Routes>
     <Route path="/" element={<Layout />} >
       {/* Public Routes */}
-      <Route path="/" element={<Home />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/about" element={<About />} />
-      <Route path="restaurant/:id" element={<RestaurantDetails />} />
-      <Route path="/contact" element={<Contact />} />
 
 
       {/* Private Route */}
-      <Route element={<RequireAuth allowedRoles={['customer']} />}>
-        <Route path="/profile" element={<Profile />} />
-      </Route>
-      <Route element={<RequireAuth allowedRoles={['customer']} />}>
-        <Route path="/profile" element={<Profile />} />
-      </Route>
+      <Route element={<PersistLogin />}>
 
-      <Route element={<RequireAuth allowedRoles={['owner']} />}>
-        <Route path="/owner/dashboard" element={<Dashboard />} />
-        <Route path="/owner/collection" element={<Collection />} />
-      </Route>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="restaurant/:id" element={<RestaurantDetails />} />
 
-      {/* Catch All  */}
-      <Route path="*" element={<NotFound />} />
+        {/* Customer Routes */}
+        <Route element={<RequireAuth allowedRoles={['customer']} />}>
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/cart" element={<Collection />} />
+          <Route path="/orders" element={<Orders />} />
+        </Route>
+
+        {/* Rider Routes */}
+        <Route element={<RequireAuth allowedRoles={['rider']} />}>
+          <Route path="/profile" element={<Profile />} />
+        </Route>
+
+
+        {/* Owner Routes */}
+        <Route element={<RequireAuth allowedRoles={['owner']} />}>
+          <Route path="/owner/dashboard" element={<Dashboard />} />
+          <Route path="/owner/earnings" element={<Earnings />} />
+          <Route path="/owner/orders" element={<ManageOrders />} />
+          <Route path="/owner/addmenu" element={<AddMenu />} />
+          <Route path="/owner/restaurant/" element={<RestaurantProfile />} />
+        </Route>
+        {/* Catch All  */}
+      </Route>
     </Route>
+    <Route path="*" element={<NotFound />} />
   </Routes >
 )
 

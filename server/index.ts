@@ -21,19 +21,17 @@ app.use(express.static('uploads'));
 
 dotenv.config();
 
-
-
 //routes
 app.use('/api', router);
 
 
-
 const port = process.env.PORT || 4000;
 
-
-
-
 app.get("/", (req: Request, res: Response) => {
+    res.cookie("test", "test", {
+        secure: false,
+        maxAge: 1000 * 20,
+    });
     res.send("Hello World")
 });
 

@@ -1,5 +1,22 @@
 import axios from './api';
 
+
+//Refresh
+export const refresh = async () => {
+    try {
+        const response = await axios.get('/refresh', {
+            withCredentials: true
+        })
+        return response.data;
+    }
+    catch (error) {
+        console.log(error)
+        throw new Error('Error fetching user data');
+    }
+}
+
+
+
 //Login User
 export const loginUser = async (email: string, password: string) => {
     try {

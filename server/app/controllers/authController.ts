@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import User, { IUser } from '../models/user';
 import sendMail from '../services/mailService';
 import * as tokenService from '../services/tokenService';
-import user from '../models/user';
+
 
 //POST - SignUp
 export const signUp = async (req: Request, res: Response) => {
@@ -81,24 +81,30 @@ export const login = async (req: Request, res: Response) => {
         //generate token
         const { accessToken, refreshToken } = await tokenService.generateToken({ _id: foundUser._id });
 
+        console.log("🔴TOKENS: ")
+        console.log(accessToken);
+        console.log(refreshToken);
+
+
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: false,
+            maxAge: 1000 * 20,//1hr
+
+        });
+
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: false,
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7d
+            maxAge: 1000 * 60 * 60, // 20m
         });
-
-        res.cookie('accessToken', accessToken, {
-            secure: false,
-            maxAge: 1000 * 60 * 60,//1hr
-
-        });
-
         console.log("Login  Successfull")
         //Store the token
-        tokenService.storeRefreshToken(foundUser._id, refreshToken);
+        // await tokenService.storeRefreshToken(foundUser._id, refreshToken);
 
+        console.log("🔴TOKENS: ")
         //!!remove token from response later
-        return res.status(200).json({ "UserInfo": { id: foundUser._id, name: foundUser.name, email: foundUser.email, phone: foundUser.phone }, "accessToken": accessToken, "refreshToken": refreshToken });
+        res.status(200).json({ "user": { id: foundUser._id, name: foundUser.name, email: foundUser.email, role: foundUser.role, phone: foundUser.phone }, "accessToken": accessToken, "refreshToken": refreshToken });
 
     } else {
         return res.status(400).json({ msg: 'Incorrect Password' });
@@ -168,7 +174,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     return res.status(200).json({ msg: 'OTP is correct' });
 }
 
-export const refresh = (req: Request, res: Response) => {
+export const refresh = async (req: Request, res: Response) => {
     //get the refresh token from the cookies
     let userData: any;
     console.log("🔴REFRESH :");
@@ -195,9 +201,18 @@ export const refresh = (req: Request, res: Response) => {
             //send new access token as response
             res.cookie('accessToken', accessToken, {
                 secure: false,
-                maxAge: 1000 * 20,
+                maxAge: 1000 * 20,// 
             });
-            return res.status(200).json({ accessToken });
+
+            res.cookie('refreshToken', refreshTokenFromCookie, {
+                httpOnly: true,
+                secure: false,
+                maxAge: 1000 * 60 * 60,//1hr
+
+            });
+
+            const user = await User.findById(userData._id);
+            return res.status(200).json({ user: { id: user?.id, name: user?.name, email: user?.email, role: user?.role }, accessToken, refreshToken: refreshTokenFromCookie });
         } catch (err) {
             console.log(err);
             return res.status(401).json({ msg: 'Invalid refresh token' });

@@ -32,7 +32,7 @@ router.post('/addMenu', authMiddleware, store.single('image'), menuController.ad
 
 router.get('/getProfile', authMiddleware, userController.getProfile)
 router.put('/updateProfile', authMiddleware, userController.updateProfile)
-router.get('/getUsers', authMiddleware, userController.getUsers)
+router.get('/getUsers', userController.getUsers)
 
 //Cart Routes
 router.get('/getCart', authMiddleware, cartController.getCart)

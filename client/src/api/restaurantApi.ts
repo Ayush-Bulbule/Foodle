@@ -6,7 +6,7 @@ import axios from './api';
 export const getMenu = async () => {
     try {
         const response = await axios.get(`/getAllMenu`);
-        console.log("response", response)
+        // console.log("response", response)
         return response.data;
     } catch (error) {
         console.log(error)
@@ -18,7 +18,7 @@ export const getMenu = async () => {
 export const getTopRestaurants = async () => {
     try {
         const response = await axios.get(`/getTopRestaurants`);
-        console.log("response", response)
+        // console.log("response", response)
         return response.data;
     } catch (error) {
         console.log(error)
