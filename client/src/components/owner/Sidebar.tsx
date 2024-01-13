@@ -14,7 +14,7 @@ import {
     HStack,
     Image,
 } from '@chakra-ui/react'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
 import { BiStoreAlt } from "react-icons/bi";
@@ -54,38 +54,54 @@ const sidebarData = [
         title: 'Support'
     }
 ];
-const SidebarContent = ({ onClick }: { onClick: Function }) => {
+
+
+
+
+const SidebarContent = () => {
+    const [active, setActive] = useState();
+    useEffect(() => {
+        const path = window.location.pathname.split('/')[2];
+        setActive(path);
+    }, [])
 
     return (<VStack py={'8'}>
         {
-            sidebarData.map((item, index) => (
-                <Link as={ReactRouterLink} to={`/owner/${item.title.toLowerCase()}`} w="100%" key={index} >
-                    <Flex
-                        w="100%"
-                        justifyContent="start"
-                        alignItems="center"
-                        backgroundColor={`${index = 1}?'orange.400':'white'`}
-                        gap={4}
-                        p={'2'}
-                        rounded={'md'}
-                        cursor={'pointer'}
-                        color={`${active == 1}?'white':'gray.800'`}
-                        px={'3'}
-                        key={index}
-                        onClick={() => onClick()}
-                    >
-                        {item.icon}
-                        <Text size={'xl'} _hover={{ textDecoration: 'none' }}>{item.title}</Text>
+            sidebarData.map((item, index) => {
+                const routeLink = item.title.toLowerCase().replace(' ', '');
+                return (
+                    <Link as={ReactRouterLink} to={`/owner/${routeLink}`} w="100%" key={index} _hover={{ textDecoration: 'none' }}>
+                        <Flex
+                            w="100%"
+                            justifyContent="start"
+                            alignItems="center"
+                            backgroundColor={`${active == routeLink ? 'orange.100' : 'white'}`}
+                            gap={4}
+                            p={'2'}
+                            rounded={'md'}
+                            cursor={'pointer'}
+                            px={'3'}
+                            color={`${active == routeLink ? 'orange.500' : 'black'}`}
+                            key={index}
+                            _hover={{ backgroundColor: 'orange.400', color: 'white', textDecoration: 'none' }}
+                            onClick={() => setActive(routeLink)}
+                        >
+                            {item.icon}
+                            <Text size={'xl'} fontWeight={`${active == routeLink ? 'semibold' : ''}`}>{item.title}</Text>
 
-                    </Flex>
-                </Link>
-            ))
+                        </Flex>
+                    </Link>)
+            }
+            )
         }
-    </VStack>)
+    </VStack >)
 
 }
 
 const Sidebar = ({ isOpen, variant, onClose }: Props) => {
+
+
+
     return variant === 'sidebar' ? (
         <Box
             position="fixed"
@@ -100,7 +116,7 @@ const Sidebar = ({ isOpen, variant, onClose }: Props) => {
                 <Image src={`../../assets/logoclean.png`} alt="Logo" w={'38'} h={'38'} />
                 <Text fontSize={"2xl"} fontWeight={"bold"} textColor={'gray.800'}>Foodle</Text>
             </HStack>
-            <SidebarContent onClick={onClose} />
+            <SidebarContent />
         </Box>
     ) : (
         <Drawer isOpen={isOpen} placement="left" onClose={onClose}>

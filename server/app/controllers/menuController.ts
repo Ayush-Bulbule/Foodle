@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import { Request, Response } from 'express';
 import Menu from '../models/menuItem';
 import { AuthenticatedRequest } from '../types/appRequests';
-
+import Restaurant, { IRestaurant } from '../models/restaurant';
 
 // GET: Get All Menu
 export const getAllMenu = async (req: Request, res: Response) => {
@@ -49,13 +49,19 @@ export const addMenu = async (req: AuthenticatedRequest, res: Response) => {
 
     const id = req.user?._id;
 
+    console.log(req.user)
+
     if (!id) {
         return res.status(401).send("You are not a restaurant owner");
     }
-    let { name, price, veg, category, description, restaurant } = req.body;
-
+    let { name, price, veg, category, description, serving } = req.body;
+    console.log('🔴REQ.BODY')
     console.log(req.body);
-    if (!name || !price || !veg || !category || !description || !restaurant) {
+    console.log(req.file);
+
+
+    const restaurant: IRestaurant[] = await Restaurant.find({ owner: id });
+    if (!name || !price || !veg || !category || !description || !restaurant || !serving) {
         return res.status(400).json({ msg: "Please enter all fields" });
     }
 
@@ -65,12 +71,15 @@ export const addMenu = async (req: AuthenticatedRequest, res: Response) => {
             image: req.file?.filename || "",
             price,
             veg,
+            description,
             category,
-            restaurant
+            serving,
+            // Update this later*******************
+            restaurant: restaurant[0]._id!,
         });
 
         const savedMenu = await newMenu.save();
-        return res.json(savedMenu);
+        return res.status(201).json({ msg: "Menu added successfully", menu: savedMenu });
     } catch (err) {
         return res.status(500).json({ error: err });
     }

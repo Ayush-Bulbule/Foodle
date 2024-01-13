@@ -13,6 +13,18 @@ export default axios.create({
     withCredentials: true,
 });
 
+
+export const apiFromData = axios.create({
+    baseURL: APP_API_URL,
+    headers: {
+        'Content-Type': 'multipart/form-data',
+        Accept: 'application/json',
+        credentials: 'include',
+    },
+    withCredentials: true,
+});
+
+
 export const api = axios.create({
     baseURL: APP_API_URL,
     withCredentials: true,
@@ -24,6 +36,40 @@ export const api = axios.create({
 });
 
 api.interceptors.response.use(
+    (config) => {
+        return config;
+    },
+    async (error) => {
+        console.log("CALLING HEREEEEE.......");
+        const originalRequest = error.config;
+        if (
+            error.response.status === 401 &&
+            originalRequest &&
+            !originalRequest._isRetry
+        ) {
+            originalRequest.isRetry = true;
+            try {
+                await axios.get(`${APP_API_URL}/refresh`, {
+                    withCredentials: true,
+                });
+
+                return api.request(originalRequest);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        if (error.response.status === 400) {
+            console.log(error.response.data.message);
+            // toast.error(error.response.data.message);
+        }
+        throw error;
+    }
+);
+
+
+//
+apiFromData.interceptors.response.use(
     (config) => {
         return config;
     },

@@ -1,4 +1,5 @@
 
+import api, { apiFromData } from './api';
 import axios from './api';
 
 
@@ -23,5 +24,16 @@ export const getTopRestaurants = async () => {
     } catch (error) {
         console.log(error)
         throw new Error('Error fetching user data');
+    }
+}
+
+export const addMenu = async (data: FormData) => {
+    try {
+        const response = await apiFromData.post(`/addMenu`, data);
+        console.log("response", response)
+        return response.data;
+    } catch (err) {
+        console.log(err)
+        throw new Error('Error adding menu data');
     }
 }

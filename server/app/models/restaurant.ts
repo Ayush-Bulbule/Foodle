@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 export interface IRestaurant extends Document {
+    _id: mongoose.Types.ObjectId,
     name: string,
     email: string,
     owner: mongoose.Types.ObjectId,

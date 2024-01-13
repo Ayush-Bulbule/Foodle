@@ -21,6 +21,7 @@ import ManageOrders from "./pages/owner/ManageOrders";
 import AddMenu from "./pages/owner/AddMenu";
 import RestaurantProfile from "./pages/owner/RestaurantProfile";
 import Orders from "./pages/Orders";
+import OwnerLayout from "./pages/owner/OwnerLayout";
 
 
 export const App = () => (
@@ -51,14 +52,16 @@ export const App = () => (
           <Route path="/profile" element={<Profile />} />
         </Route>
 
-
         {/* Owner Routes */}
         <Route element={<RequireAuth allowedRoles={['owner']} />}>
-          <Route path="/owner/dashboard" element={<Dashboard />} />
-          <Route path="/owner/earnings" element={<Earnings />} />
-          <Route path="/owner/orders" element={<ManageOrders />} />
-          <Route path="/owner/addmenu" element={<AddMenu />} />
-          <Route path="/owner/restaurant/" element={<RestaurantProfile />} />
+          {/* Layout For Owner */}
+          <Route path="/owner" element={<OwnerLayout />} >
+            <Route path="/owner/dashboard" element={<Dashboard />} />
+            <Route path="/owner/earnings" element={<Earnings />} />
+            <Route path="/owner/orders" element={<ManageOrders />} />
+            <Route path="/owner/addmenu" element={<AddMenu />} />
+            <Route path="/owner/restaurant/" element={<RestaurantProfile />} />
+          </Route>
         </Route>
         {/* Catch All  */}
       </Route>

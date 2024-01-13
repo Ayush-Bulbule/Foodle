@@ -89,14 +89,14 @@ export const login = async (req: Request, res: Response) => {
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: false,
-            maxAge: 1000 * 20,//1hr
+            maxAge: 1000 * 60 * 60,//1hr
 
         });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: false,
-            maxAge: 1000 * 60 * 60, // 20m
+            maxAge: 1000 * 60 * 60 * 24, //1day
         });
         console.log("Login  Successfull")
         //Store the token
@@ -201,13 +201,13 @@ export const refresh = async (req: Request, res: Response) => {
             //send new access token as response
             res.cookie('accessToken', accessToken, {
                 secure: false,
-                maxAge: 1000 * 20,// 
+                maxAge: 1000 * 60 * 60,// 
             });
 
             res.cookie('refreshToken', refreshTokenFromCookie, {
                 httpOnly: true,
                 secure: false,
-                maxAge: 1000 * 60 * 60,//1hr
+                maxAge: 1000 * 60 * 60 * 24,//1day
 
             });
 
