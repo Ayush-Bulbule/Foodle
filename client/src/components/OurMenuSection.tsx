@@ -17,7 +17,6 @@ const OurMenuSection = () => {
                 console.log(err);
             }
         };
-
         getMenuFromApi();
     }, []); // Empty dependency array means this effect runs once after the initial render
 
@@ -29,7 +28,6 @@ const OurMenuSection = () => {
             <Text fontSize={'md'} mt={'4'} textColor={'gray.600'} textAlign={'center'}>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
             </Text>
-
             <Flex flexWrap={'wrap'} mt={'8'} alignItems={'center'} justifyContent={'center'}>
                 {/* Render your menu items here */}
                 {menuData.map((menuItem, index) => (

@@ -25,12 +25,13 @@ const OwnerLayout = () => {
                     reverseOrder={false}
                 />
                 <Sidebar
+                    //@ts-ignore
                     variant={variants?.navigation}
                     isOpen={isSidebarOpen}
                     onClose={toggleSidebar}
                 />
 
-                <Box h={'100vh'} w={{ base: '100vw', lg: '100%' }} ml={{ lg: '250px' }} p={'4'} bg={'gray.100'}>
+                <Box h={'100vh'} w={{ base: '100vw', lg: '100%' }} ml={{ lg: '250px' }} p={'4'} bg={'gray.50'}>
                     {/* Header Section */}
                     <Box display={'flex'}>
                         <Button onClick={toggleSidebar} bg={'white'} variant={'solid'} border={'1px'} borderColor={'orange.400'}>

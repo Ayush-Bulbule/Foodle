@@ -1,18 +1,18 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 
 export interface IAddress extends Document {
-    house: String,
+    _id: mongoose.Types.ObjectId,
+    building: String,
     street: String,
     locality: String,
-    landmark: String,
     city: String,
     state: String,
     zip: Number
 }
 
-const addressSchema = new mongoose.Schema<IAddress>({
-    house: {
-        types: String,
+const addressSchema = new Schema<IAddress>({
+    building: {
+        type: String,
         required: true
     },
     street: {
@@ -22,9 +22,6 @@ const addressSchema = new mongoose.Schema<IAddress>({
     locality: {
         type: String,
         required: true,
-    },
-    landmark: {
-        type: String
     },
     city: {
         type: String,

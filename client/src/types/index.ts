@@ -12,6 +12,15 @@ export interface IRestaurant {
     cuisine: string[];
 }
 
+
+export interface IAddress {
+    building: string,
+    street: string,
+    locality: string,
+    city: string,
+    state: string,
+    zip: string
+}
 export interface IUser {
     id: string;
     name: string;

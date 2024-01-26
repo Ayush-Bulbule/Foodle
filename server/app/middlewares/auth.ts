@@ -5,11 +5,9 @@ import { AuthenticatedRequest } from '../types/appRequests';
 export const authMiddleware = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     //Auth Logic Here
     try {
-
         console.log("ReqArrived!!!!")
         console.log(req);
         const { accessToken } = req.cookies;
-
         if (!accessToken) {
             console.log("🔴NO ACCESS TOKEN")
             return res.status(401).json({ msg: "You are not authenticated!" })

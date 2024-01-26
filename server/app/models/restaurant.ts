@@ -6,7 +6,7 @@ export interface IRestaurant extends Document {
     email: string,
     owner: mongoose.Types.ObjectId,
     phone: string,
-    address: mongoose.Types.ObjectId,
+    address: mongoose.Types.ObjectId | null,
     image: string,
     veg: boolean,
     description: string,
@@ -35,7 +35,9 @@ const restaurantSchema = new Schema<IRestaurant>({
         required: true
     },
     address: {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        ref: 'Address',
+        default: null,
     },
     image: {
         type: String,

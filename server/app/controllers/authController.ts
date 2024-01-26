@@ -220,3 +220,24 @@ export const refresh = async (req: Request, res: Response) => {
     }
     return res.status(401).json({ msg: 'Invalid refresh token' });
 };
+
+
+
+// GET 
+export const logout = async (req: Request, res: Response) => {
+    const { refreshToken } = req.cookies;
+    if (!refreshToken) {
+        return res.status(401).json({ msg: 'Invalid refresh token' });
+    }
+    try {
+        const userData = tokenService.verifyRefreshToken(refreshToken);
+        const deletedToken = tokenService.deleteRefreshToken(userData?._id);
+        console.log(deletedToken);
+        res.clearCookie('accessToken');
+        res.clearCookie('refreshToken');
+        return res.status(200).json({ msg: 'Logged out successfully' });
+    } catch (err) {
+        console.log(err);
+        return res.status(401).json({ msg: 'Invalid refresh token' });
+    }
+};

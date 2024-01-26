@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
 import { BiStoreAlt } from "react-icons/bi";
-import { LuLayoutDashboard, LuShoppingCart, LuChevronDown, LuWallet, LuPhone, LuListPlus } from 'react-icons/lu';
+import { LuLayoutDashboard, LuShoppingCart, LuChevronDown, LuWallet, LuPhone, LuListPlus, LuUser } from 'react-icons/lu';
 
 
 interface Props {
@@ -50,16 +50,16 @@ const sidebarData = [
         icon: <LuWallet size={22} />,
         title: 'Earnings'
     }, {
-        icon: <LuPhone />,
+        icon: <LuPhone size={22} />,
         title: 'Support'
+    }, {
+        icon: <LuUser size={22} />,
+        title: 'Profile'
     }
 ];
 
-
-
-
 const SidebarContent = () => {
-    const [active, setActive] = useState();
+    const [active, setActive] = useState('/dashboard');
     useEffect(() => {
         const path = window.location.pathname.split('/')[2];
         setActive(path);

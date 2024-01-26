@@ -61,6 +61,7 @@ export const App = () => (
             <Route path="/owner/orders" element={<ManageOrders />} />
             <Route path="/owner/addmenu" element={<AddMenu />} />
             <Route path="/owner/restaurant/" element={<RestaurantProfile />} />
+            <Route path="/owner/profile/" element={<Profile />} />
           </Route>
         </Route>
         {/* Catch All  */}

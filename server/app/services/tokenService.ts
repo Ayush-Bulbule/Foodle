@@ -1,8 +1,13 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { ObjectId } from "mongoose";
 import Refresh from "../models/refresh";
+import { IUser } from "../models/user";
 
-
+interface IPayload extends JwtPayload {
+    _id: string;
+    exp: number;
+    iat: number;
+}
 //Generate Both Refresh Token and Access Token
 export const generateToken = (payload: any) => {
     const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET!, {
@@ -49,7 +54,7 @@ export const findRefreshToken = async (userId: any, refreshToken: string) => {
 
 //Verify Refresh Tpkem
 export const verifyRefreshToken = (token: string) => {
-    const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET!);
+    const decoded: IPayload = jwt.verify(token, process.env.JWT_REFRESH_SECRET!) as IPayload;
     console.log("Decoded!")
     console.log(decoded)
     console.log(typeof (decoded))
