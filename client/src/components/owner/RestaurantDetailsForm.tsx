@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Flex, Text, Input, Button, Switch, Textarea, GridItem, Grid, Image } from '@chakra-ui/react'
 import { TagsInput } from "react-tag-input-component";
-import { getRestaurantDetails, updateRestaurant } from '../../api/restaurantApi';
+import { addRestaurant, getRestaurantDetails, updateRestaurant } from '../../api/restaurantApi';
 import toast from 'react-hot-toast';
 import { IRestaurant } from '../../types';
 
 
 interface Props {
     profile: IRestaurant,
-    setProfile: Function
+    setProfile: Function,
+    edit: boolean,
+    setEdit: Function
 }
 
-const RestaurantDetailsForm: React.FC<Props> = ({ profile, setProfile }) => {
+const RestaurantDetailsForm: React.FC<Props> = ({ profile, setProfile, edit, setEdit }) => {
 
     const [cuisine, setCuisine] = useState<string[]>([]);
-    const [edit, setEdit] = useState(false);
+
 
     const [image, setImage] = useState<File | null>(null);
 
@@ -60,6 +62,9 @@ const RestaurantDetailsForm: React.FC<Props> = ({ profile, setProfile }) => {
         formData.append("opens", profile.opens);
         formData.append("closes", profile.closes);
         formData.append("rating", profile.rating.toString());
+        cuisine.forEach((c) => {
+            formData.append("cuisine[]", c);
+        });
 
         if (image) {
             formData.append("image", image);
@@ -67,26 +72,21 @@ const RestaurantDetailsForm: React.FC<Props> = ({ profile, setProfile }) => {
         //append image
 
         try {
-            const data = await updateRestaurant(profile._id, formData);
-            console.log("✅SUCCESS: ", data)
 
-            setEdit(false);
-            if (data) {
-                toast.success("Data Updated!!");
-                // //clear form
-                // setProfile({
-                //     _id: '',
-                //     name: '',
-                //     email: '',
-                //     phone: '',
-                //     image: '',
-                //     veg: false,
-                //     description: '',
-                //     opens: '',
-                //     closes: '',
-                //     rating: 0,
-                //     cuisine: []
-                // })
+            if (profile._id !== '') {
+                const data = await updateRestaurant(profile._id, formData);
+                console.log("✅SUCCESS: ", data)
+                setEdit(false);
+                if (data) {
+                    toast.success("Data Updated!!");
+                }
+            } else {
+                const data = await addRestaurant(formData);
+                console.log("✅SUCCESS: ", data)
+                setEdit(false);
+                if (data) {
+                    toast.success("Restaurant Added!!");
+                }
             }
         } catch (err) {
             console.log("Add Menu ERROR: ", err)
@@ -122,7 +122,7 @@ const RestaurantDetailsForm: React.FC<Props> = ({ profile, setProfile }) => {
                         </Box>
                         <Box w={{ base: '100%', md: '50%' }}>
                             <Text fontSize={'sm'} mb={2} fontWeight={'semibold'}>Vegetarian</Text>
-                            <Switch mt={1} isChecked={profile.veg} name="veg" size="lg" colorScheme="green" disabled={!edit} />
+                            <Switch mt={1} isChecked={profile.veg} onChange={() => setProfile({ ...profile, veg: !profile.veg })} name="veg" size="lg" colorScheme="green" disabled={!edit} />
                         </Box>
                     </Flex>
 

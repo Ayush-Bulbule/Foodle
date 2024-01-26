@@ -31,7 +31,8 @@ export const loginUser = async (email: string, password: string) => {
 //Signup User
 export const signupUser = async (name: string, email: string, phone: string, address: string, password: string) => {
     try {
-        const response = await axios.post(`/signup`, { name, email, phone, address, password });
+        const response = await axios.post(`/register`, { name, email, phone, address, password });
+        console.log("response", response)
         return response.data;
     } catch (error) {
         console.log(error);

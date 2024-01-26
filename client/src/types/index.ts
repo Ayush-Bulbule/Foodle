@@ -8,6 +8,7 @@ export interface IRestaurant {
     description: string;
     opens: string;
     closes: string;
+    address: IAddress;
     rating: number;
     cuisine: string[];
 }

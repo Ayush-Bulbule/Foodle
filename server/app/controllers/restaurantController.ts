@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt';
 import Restaurant from '../models/restaurant';
+import Menu from '../models/menuItem';
 import { AuthenticatedRequest } from '../types/appRequests';
 import User, { IUser } from '../models/user';
 import mongoose from 'mongoose';
@@ -16,10 +17,29 @@ export const getRestaurants = async (req: Request, res: Response) => {
     }
 }
 
+
+//GET: Restaurant Details
+export const getRestaurantDetails = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+
+        if (!id) {
+            return res.status(400).send("Please provide id");
+        }
+        const restaurant = await Restaurant.findById(id).populate('address');
+
+        const menu = await Menu.find({ restaurant: id });
+
+        return res.status(200).json({ restaurant, menu });
+    } catch (err) {
+        res.status(500).json({ msg: err })
+    }
+}
+
 // GET:  Top Restaurants.
 export const getTopRestaurants = async (req: Request, res: Response) => {
     try {
-        const restaurants = await Restaurant.find().sort({ rating: -1 }).limit(8);
+        const restaurants = await Restaurant.find().populate('address').sort({ rating: -1 }).limit(8);
 
         res.status(200).json({ restaurants });
     } catch (err) {
@@ -81,7 +101,7 @@ export const addRestaurant = async (req: AuthenticatedRequest, res: Response) =>
     let { name, email, phone, image, veg, description, opens, closes, cuisine } = req.body;
     console.log("Restaurant Data");
     console.log(req.body);
-    if (!name || !email || !phone || !image || !veg || !description || !opens || !closes || !cuisine) {
+    if (!name || !email || !phone || !veg || !description || !opens || !closes || !cuisine) {
         return res.status(400).send("Please fill all the details!!");
     }
     //If All Are correct insert it to DB

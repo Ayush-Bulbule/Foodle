@@ -46,7 +46,7 @@ export const addMenu = async (data: FormData) => {
 
 
 // GET restaurant Details 
-export const getRestaurantDetails = async () => {
+export const getRestaurantDetailsById = async () => {
     try {
         const response = await axios.get(`/getRestaurantByUserId`);
 
@@ -55,6 +55,18 @@ export const getRestaurantDetails = async () => {
     } catch (error) {
         console.log(error)
         throw new Error('Error fetching user data');
+    }
+}
+
+//POST: Add Restaurant
+export const addRestaurant = async (data: FormData) => {
+    try {
+        const response = await apiFromData.post(`/addRestaurant`, data);
+        console.log("response", response)
+        return response.data;
+    } catch (err) {
+        console.log(err)
+        throw new Error('Error adding menu data');
     }
 }
 
@@ -80,5 +92,18 @@ export const updateRestaurantAddress = async (address: IAddress) => {
     } catch (err) {
         console.log(err);
         throw new Error('Error updating address');
+    }
+}
+
+
+//GET: Get Restaurant Details
+export const getRestaurantDetails = async (id: string) => {
+    try {
+        const response = await api.get(`/getRestaurantDetails/${id}`);
+        console.log("response", response)
+        return response.data;
+    } catch (err) {
+        console.log(err)
+        throw new Error('Error fetching restaurant data');
     }
 }

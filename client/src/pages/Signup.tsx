@@ -8,7 +8,6 @@ import { signupUser } from '../api/auth'
 const Signup = () => {
     const [verifyPage, setVerifyPage] = useState(false);
     const [otp, setOtp] = useState('');
-    const [data, setData] = useState();
     const [name, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [address, setAddress] = useState<string>("");
@@ -33,14 +32,8 @@ const Signup = () => {
             return;
         }
         try {
-            signupUser(name, email, phone, address, password)
-                .then(data => setData(data))
-                .catch((error) => {
-                    console.log("Error!" + error);
-                    toast.error("Something went wrong!!")
-                })
-            console.log(data ? data : "No data");
-
+            const res = signupUser(name, email, phone, address, password);
+            toast.success("User created successfully!!");
         } catch (error) {
             console.log("Error!" + error);
             toast.error("Something went wrong!!")

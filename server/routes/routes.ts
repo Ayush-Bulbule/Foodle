@@ -20,6 +20,7 @@ router.post('/logout', authController.logout)
 
 /* Restaurant Routes */
 router.get('/getRestaurantById', restaurantController.getRestaurantById)
+router.get('/getRestaurantDetails/:id', restaurantController.getRestaurantDetails)
 router.get('/getRestaurantByUserId', authMiddleware, restaurantController.getRestaurantByUserId)
 router.get('/getAllRestaurants', restaurantController.getRestaurants)
 router.get('/getTopRestaurants', restaurantController.getTopRestaurants)
