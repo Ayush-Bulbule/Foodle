@@ -70,9 +70,6 @@ export const getRestaurantByUserId = async (req: AuthenticatedRequest, res: Resp
         const restaurant = await Restaurant.findOne({ owner: id }).populate('address');
         console.log("POPULATE")
         console.log(restaurant)
-
-
-
         return res.status(200).json({ restaurant });
     } catch (err) {
         res.status(500).json({ msg: err })

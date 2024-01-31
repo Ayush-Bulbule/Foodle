@@ -5,6 +5,10 @@ import { getRestaurantDetails } from '../api/restaurantApi';
 import Loader from '../components/Loader';
 import { FaAd, FaFish, FaLeaf, FaPlus } from 'react-icons/fa';
 import { FaRegStarHalfStroke, } from 'react-icons/fa6';
+import Navbar from '../components/Navbar';
+import MenuDetailsCard from '../components/MenuDetailsCard';
+import { Toaster } from 'react-hot-toast';
+import { getCart } from '../api/cartApi';
 
 const RestaurantDetails = () => {
 
@@ -14,12 +18,19 @@ const RestaurantDetails = () => {
     const [restaurant, setRestaurant] = useState<any>(null)
     const [menu, setMenu] = useState<any>(null)
 
+    const [cart, setCart] = useState<any>(null)
+
     useEffect(() => {
         // fetch restaurant by id
         // setRestaurant(response.data)
         const fetchRestaurant = async () => {
             if (id) {
                 const data = await getRestaurantDetails(id);
+                const { cart } = await getCart();
+
+                if (cart) {
+                    setCart(cart);
+                }
                 setRestaurant(data.restaurant);
                 setMenu(data.menu);
                 console.log(data);
@@ -31,10 +42,17 @@ const RestaurantDetails = () => {
     return (
 
         <>
+            <Navbar />
+
+            <Toaster
+                position="top-center"
+                reverseOrder={false}
+            />
             {
                 restaurant ?
                     <Container
-                        maxW={'container.lg'} minH={'96'} >
+                        maxW={'container.lg'} minH={'96'} py={'20'} >
+
 
                         {/* Restaurant Data */}
                         <Box w={'full'} borderRadius={'2xl'} py={4}>
@@ -81,43 +99,13 @@ const RestaurantDetails = () => {
                         <hr />
                         {/* Menu */}
                         {
-                            menu && menu.map((item: any) => (
-                                <Flex w={'full'} py={3} display={'flex'} border={'none'} borderBottom={'1px'} pb={6} borderWidth={1} borderColor={'gray.200'} m="2" alignItems={'center'}>
-                                    <Box position={'relative'} w={{ base: '90px', md: '180px' }} h={{ base: '100px', md: '130px' }} flexShrink={0}>
-                                        <Image src={`http://localhost:4000/${item?.image}`} alt={item?.name} w={'full'} h={'full'} objectFit={'cover'} borderRadius={'xl'} />
-                                        <Button
-                                            position={'absolute'}
-                                            display={{ base: 'none', md: 'flex' }}
-                                            bottom={-2}
-                                            right={50}
-                                            left={50}
-                                            py={0.5}
-                                            px={3}
-                                            color={'green.500'}
-                                            size={'sm'}
-                                            columnGap={2}
-                                            shadow={'md'}
-                                        >
-                                            Add
-                                            <FaPlus />
-                                        </Button>
-                                    </Box>
-                                    <Box
-                                        px={3}
-
-                                        alignItems={'center'}
-                                    >
-                                        <Heading fontSize={'xl'} mb={3} fontWeight={'bold'}>{item?.name}</Heading>
-                                        <Text fontSize={{ base: 'xs', md: 'sm' }} fontWeight={'normal'} color={'gray.500'} mb={3} noOfLines={2}>{item.description}</Text>
-                                        <Flex justifyContent={'space-between'} alignItems={'center'}>
-                                            <Flex alignItems={'center'} columnGap={2} justifyItems={'center'}>
-                                                <Text fontSize={'md'} fontWeight={'medium'}> ₹ {item?.price}</Text> | <Text fontSize={'xs'} fontWeight={'medium'}>Serves {item.serving}</Text>
-                                            </Flex>
-                                            <Button size={'sm'} display={{ base: 'block', md: 'none' }}>Add</Button>
-                                        </Flex>
-                                    </Box>
-                                </Flex>
-                            ))
+                            menu && menu.map((item: any) => {
+                                const cartItem = cart && cart.items.find((cartItem: any) => cartItem.item == item._id);
+                                // console.log("Cart Item:", cartItem)
+                                const cartQty = cartItem?.quantity || 0;
+                                console.log("Cart Qty:", cartQty)
+                                return <MenuDetailsCard item={item} cartQty={cartQty || 0} />
+                            })
 
                         }
                     </Container >

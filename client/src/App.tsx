@@ -7,12 +7,11 @@ import About from "./pages/About"
 import Contact from "./pages/Contact"
 import Signup from "./pages/Signup"
 import Login from "./pages/Login"
-import Profile from "./pages/Profile";
+import Profile from "./pages/UserProfile";
 import { Layout } from "./pages/Layout";
 import NotFound from "./pages/NotFound";
 
 import RequireAuth from "./pages/RequireAuth";
-import Collection from "./pages/owner/Earnings";
 import Dashboard from "./pages/owner/Dashboard";
 import RestaurantDetails from "./pages/RestaurantDetails";
 import PersistLogin from "./pages/PersistLogin";
@@ -22,6 +21,7 @@ import AddMenu from "./pages/owner/AddMenu";
 import RestaurantProfile from "./pages/owner/RestaurantProfile";
 import Orders from "./pages/Orders";
 import OwnerLayout from "./pages/owner/OwnerLayout";
+import Cart from "./pages/Cart";
 
 
 export const App = () => (
@@ -43,7 +43,7 @@ export const App = () => (
         {/* Customer Routes */}
         <Route element={<RequireAuth allowedRoles={['customer']} />}>
           <Route path="/profile" element={<Profile />} />
-          <Route path="/cart" element={<Collection />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/orders" element={<Orders />} />
         </Route>
 

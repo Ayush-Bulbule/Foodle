@@ -1,4 +1,17 @@
-import mongoose from 'mongoose'
+import mongoose, { Mongoose } from 'mongoose'
+
+export interface IOrder extends Document {
+    user: mongoose.Types.ObjectId;
+    items: [{
+        item: mongoose.Types.ObjectId;
+        quantity: number;
+    }],
+    address: string;
+    status: string;
+    payment: mongoose.Types.ObjectId;
+    restaurant: mongoose.Types.ObjectId;
+}
+
 //Yet to implement
 const orderSchema = new mongoose.Schema({
     user: {
@@ -16,7 +29,7 @@ const orderSchema = new mongoose.Schema({
         }
     }],
     address: {
-        type: mongoose.Types.ObjectId,
+        type: String,
         ref: "Address"
     },
     status: {
@@ -28,7 +41,13 @@ const orderSchema = new mongoose.Schema({
     payment: {
         type: mongoose.Types.ObjectId,
         ref: "Payment"
-    }
+    },
+
+
 }, {
     timestamps: true
 });
+
+
+
+export default mongoose.model<IOrder>('Order', orderSchema);

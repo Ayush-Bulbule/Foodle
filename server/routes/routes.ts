@@ -4,6 +4,7 @@ import * as menuController from '../app/controllers/menuController'
 import * as restaurantController from '../app/controllers/restaurantController'
 import * as cartController from '../app/controllers/cartController'
 import * as userController from '../app/controllers/userController'
+import * as orderController from '../app/controllers/orderController'
 import store from '../app/middlewares/multeradd';
 import { authMiddleware } from '../app/middlewares/auth'
 const router = express.Router()
@@ -41,13 +42,18 @@ router.get('/getProfile', authMiddleware, userController.getProfile)
 router.put('/updateProfile', authMiddleware, userController.updateProfile)
 router.get('/getUsers', userController.getUsers)
 
+
+
 //Cart Routes
 router.get('/getCart', authMiddleware, cartController.getCart)
-router.delete('/deleteCart', authMiddleware, cartController.deleteCart)
+router.get('/getCartData', authMiddleware, cartController.getCartItems)
+router.delete('/deleteCart/:id', authMiddleware, cartController.deleteCart)
 router.post('/addToCart', authMiddleware, cartController.addCart)
 
 
-//
+//Order ROutes
+router.get("/checkout", authMiddleware, orderController.createOrder);
+
 
 
 export default router;

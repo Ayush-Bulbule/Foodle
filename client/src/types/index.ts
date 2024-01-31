@@ -14,6 +14,19 @@ export interface IRestaurant {
 }
 
 
+export interface IMenu {
+    _id: string;
+    name: string;
+    price: number;
+    category: string;
+    image: string;
+    restaurant: string;
+    description: string;
+    veg: boolean;
+    serving: number;
+}
+
+
 export interface IAddress {
     building: string,
     street: string,

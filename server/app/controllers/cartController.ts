@@ -1,5 +1,6 @@
 import Cart, { ICart } from '../models/cart';
 import User from '../models/user';
+import MenuItem from '../models/menuItem';
 import { Request, Response } from 'express';
 import { AuthenticatedRequest } from '../types/appRequests';
 
@@ -12,13 +13,42 @@ export const getCart = async (req: AuthenticatedRequest, res: Response) => {
 
         const cart = await Cart.findOne({ user: user?._id });
         if (!cart) {
-            return res.status(404).send("Cart not found");
+            return res.status(204).json({ status: "EMPTY", msg: "Your cart is Empty!!" })
         }
 
         return res.status(200).json({ cart });
     } catch (err) {
         return res.status(500).json({ msg: err })
 
+    }
+}
+
+// GET: getCartItems
+export const getCartItems = async (req: AuthenticatedRequest, res: Response) => {
+    try {
+        const user = req.user;
+        const cart = await Cart.findOne({ user: user?._id });
+        if (!cart) {
+            return res.status(204).json({ status: "EMPTY", msg: "Your cart is Empty!!" })
+        }
+
+        //create a new array of item id's
+        const itemIds = cart.items.map((item: any) => item.item);
+
+
+        //find all items in the items array
+        const cartItems = await MenuItem.find({ _id: { $in: itemIds } }); // $in is a mongo operator
+
+        //create a new array of items with quantity
+        const cartData: any = cartItems.map((item: any) => {
+            console.log("Item Data")
+            console.log(item._id)
+            const cartItem = cart.items.find((cartItem: any) => cartItem.item.equals(item._id));
+            return { item, quantity: cartItem?.quantity }
+        })
+        return res.status(200).json({ cart: cartData, status: 'success' });
+    } catch (err) {
+        return res.status(500).json({ msg: err })
     }
 }
 
@@ -50,7 +80,7 @@ export const addCart = async (req: AuthenticatedRequest, res: Response) => {
             }
             // Save the updated Cart
             await cart.save();
-            return res.status(200).json({ cart });
+            return res.status(200).json({ cart, status: 'success' });
         }
         else {
             const newCart = new Cart({
@@ -58,7 +88,7 @@ export const addCart = async (req: AuthenticatedRequest, res: Response) => {
                 items: [{ item, quantity }]
             });
             await newCart.save();
-            return res.status(200).json({ newCart });
+            return res.status(200).json({ newCart, status: 'success' });
         }
 
     } catch (err) {
@@ -69,13 +99,13 @@ export const addCart = async (req: AuthenticatedRequest, res: Response) => {
 export const deleteCart = async (req: AuthenticatedRequest, res: Response) => {
     try {
         const user = req.user;
-        const { item } = req.body;
+        const { id } = req.params;
         const cart = await Cart.findOne({ user: user?._id });
 
         if (!cart) {
             return res.status(404).send("Cart not found");
         }
-        const index = cart.items.findIndex((cartIndex: any) => cartIndex.item == item)
+        const index = cart.items.findIndex((cartIndex: any) => cartIndex.item == id)
         if (index >= 0) {
             cart.items.splice(index, 1);  ///At index remove 1 element - splice***
             await cart.save();

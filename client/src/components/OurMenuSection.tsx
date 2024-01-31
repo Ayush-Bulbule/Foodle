@@ -30,8 +30,8 @@ const OurMenuSection = () => {
             </Text>
             <Flex flexWrap={'wrap'} mt={'8'} alignItems={'center'} justifyContent={'center'}>
                 {/* Render your menu items here */}
-                {menuData.map((menuItem, index) => (
-                    <MenuCard key={index} title={menuItem?.name} desc={menuItem?.desc} img={menuItem?.image} />
+                {menuData.slice(0, 5).map((menuItem, index) => (
+                    <MenuCard key={index} title={menuItem?.name} desc={menuItem?.desc} img={menuItem?.image} price={menuItem?.price} />
                 ))}
             </Flex>
             <Button mt={'8'} bg={'orange.400'} rounded={'full'} color={'white'} mx={'auto'} fontWeight={'bold'}>

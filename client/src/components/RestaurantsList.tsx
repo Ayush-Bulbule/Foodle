@@ -24,7 +24,7 @@ const RestaurantsList = () => {
 
     return (
         <>
-            <Container display={'flex'} justifyItems={'center'} flexDirection={'column'} minH={'4xl'} maxW={'container.xl'} flex={1} my={'12'} alignItems={'center'} justifyContent={'center'}>
+            <Container display={'flex'} flexDirection={'column'} minH={'4xl'} maxW={'container.xl'} flex={1} my={'12'} >
                 <Text fontSize={'3xl'} fontWeight={'bold'} textAlign={'center'}>
                     Restaurants
                 </Text>

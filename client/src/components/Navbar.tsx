@@ -47,8 +47,10 @@ const Navbar = () => {
                 <Flex width={{ base: '100%', md: '80%', xl: '80%' }} mx={'auto'} direction={"row"} justifyContent={"space-between"}>
                     <HStack verticalAlign={'center'} alignItems={"center"}>
                         {/* Logo */}
-                        <Image src={`./assets/logoclean.png`} alt="Logo" w={'38'} h={'38'} />
-                        <Text fontSize={"2xl"} fontWeight={"bold"} textColor={'gray.800'}>Foodle</Text>
+                        <Link to="/" as={RouterLink} display={'flex'}>
+                            <Image src={`/assets/logoclean.png`} alt="Logo" w={'38'} h={'38'} />
+                            <Text fontSize={"2xl"} fontWeight={"bold"} textColor={'gray.800'} _hover={{ textDecoration: 'none' }}>Foodle</Text>
+                        </Link>
 
                         {/* Addresss */}
                         <Flex ml={'8'} alignItems={'center'} mt={1} cursor={'pointer'}>
@@ -66,7 +68,7 @@ const Navbar = () => {
                         <Link to="/cart" display={'flex'} alignItems={'center'} columnGap={'2'} as={RouterLink}><LuShoppingCart size={18} /> Cart</Link>
                         {
                             isLoggedIn ?
-                                <Link to="/" color={'orange.500'} display={'flex'} alignItems={'center'} as={RouterLink}><LuUser size={18} style={{ marginRight: '3px' }} /> Ayush<LuChevronDown /></Link>
+                                <Link to="/profile" color={'orange.500'} display={'flex'} alignItems={'center'} as={RouterLink}><LuUser size={18} style={{ marginRight: '3px' }} /> Ayush<LuChevronDown /></Link>
 
                                 :
                                 <Button px={'6'} py={'1.5'} shadow={'xs'} variant='solid' bg={"orange.400"} textColor={"white"} rounded={"full"}>
