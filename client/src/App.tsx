@@ -22,6 +22,7 @@ import RestaurantProfile from "./pages/owner/RestaurantProfile";
 import Orders from "./pages/Orders";
 import OwnerLayout from "./pages/owner/OwnerLayout";
 import Cart from "./pages/Cart";
+import PaymentSuccess from "./pages/PaymentSuccess";
 
 
 export const App = () => (
@@ -45,6 +46,7 @@ export const App = () => (
           <Route path="/profile" element={<Profile />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/payment/success" element={<PaymentSuccess />} />
         </Route>
 
         {/* Rider Routes */}

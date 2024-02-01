@@ -6,6 +6,7 @@ import Cart, { ICart } from '../models/cart';
 import Order from '../models/order';
 import Address from '../models/address';
 import MenuItem from '../models/menuItem';
+import menuItem from '../models/menuItem';
 
 
 export const createOrder = async (req: AuthenticatedRequest, res: Response) => {
@@ -38,31 +39,46 @@ export const createOrder = async (req: AuthenticatedRequest, res: Response) => {
     const menuItems = await MenuItem.find({ _id: { $in: itemsArr } });
 
     //Now check if they are from same restaurant
-    const restaurant = menuItems[0].restaurant;
-    const sameRestaurant = menuItems.map((menuItem) => menuItem.restaurant.equals(restaurant));
+    const restaurant = menuItems[0].restaurant; //Array .prototype.every
+    const sameRestaurant = menuItems.every((menuItem) => menuItem.restaurant.equals(restaurant));
+
+
+
+    console.log("SAME RRES")
+    console.log(sameRestaurant);
 
     if (!sameRestaurant) {
-        return res.status(400).json({
+        return res.status(409).json({
             status: "DIFFERENT_RESTAURANT", msg: "Your cart contains order from different places! Order from same restaurant is supported at a time!"
         })
     }
 
     try {
+        //calculate amount
+        const totalAmount = menuItems.reduce((acc, menuItem) => {
+            const cartItem = cart.items.find((cartItem) => cartItem.item.equals(menuItem._id));
+            if (cartItem) {
+                const itemTotal = cartItem.quantity * menuItem.price;
+                return acc += itemTotal;
+            }
+            return acc;
+        }, 0)
 
-        //Else create new order
-        // const order = new Order({
-        //     user: user._id,
-        //     items: cart.items,
-        //     address: user.address,
-        //     status: "ORDERED"
-        // })
+        // Else create new order
+        const order = new Order({
+            user: user._id,
+            items: cart.items,
+            address: user.address,
+            amount: totalAmount,
+            status: "ORDERED"
+        });
 
-        // await order.save();
+        await order.save();
 
-        //delete cart
-        await Cart.deleteOne({ user: user._id });
+        // // delete cart
+        // await Cart.deleteOne({ user: user._id });
 
-        return res.status(201).json({ "status": "ORDER_PLACED", msg: "Order Placed Successfully!" });
+        return res.status(201).json({ "status": "ORDER_PLACED", msg: "Order Initiated Successfully!", order });
     } catch (err) {
         console.log("ERROR: ", err);
         res.send(501).json({ "status": "ERROR", msg: "Error saving order!" })

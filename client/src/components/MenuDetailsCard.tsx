@@ -59,7 +59,7 @@ const MenuDetailsCard: React.FC<IProps> = ({ item, cartQty }) => {
                 <Text fontSize={{ base: 'xs', md: 'sm' }} fontWeight={'normal'} color={'gray.500'} mb={3} noOfLines={2}>{item.description}</Text>
                 <Flex justifyContent={'space-between'} alignItems={'center'}>
                     <Flex alignItems={'center'} columnGap={2} justifyItems={'center'}>
-                        <Text fontSize={'md'} fontWeight={'medium'}> ₹ {item?.price + 20}</Text>
+                        <Text fontSize={'md'} fontWeight={'medium'}> ₹ {item?.price}</Text>
                         <Text fontSize={'xs'} fontWeight={'medium'} color={'gray.500'}> | </Text>
                         <Text fontSize={'xs'} fontWeight={'medium'}>Serves {item.serving}</Text>
                         <Text fontSize={'xs'} fontWeight={'medium'} color={'gray.500'}> | </Text>

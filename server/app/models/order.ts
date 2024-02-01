@@ -8,6 +8,8 @@ export interface IOrder extends Document {
     }],
     address: string;
     status: string;
+    amount: number;
+    discount: number;
     payment: mongoose.Types.ObjectId;
     restaurant: mongoose.Types.ObjectId;
 }
@@ -32,6 +34,15 @@ const orderSchema = new mongoose.Schema({
         type: String,
         ref: "Address"
     },
+    amount: {
+        type: Number,
+        required: true
+    },
+    disccount: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     status: {
         type: String,
         required: true,
@@ -42,8 +53,6 @@ const orderSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: "Payment"
     },
-
-
 }, {
     timestamps: true
 });

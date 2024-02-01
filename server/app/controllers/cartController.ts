@@ -46,6 +46,9 @@ export const getCartItems = async (req: AuthenticatedRequest, res: Response) => 
             const cartItem = cart.items.find((cartItem: any) => cartItem.item.equals(item._id));
             return { item, quantity: cartItem?.quantity }
         })
+
+
+
         return res.status(200).json({ cart: cartData, status: 'success' });
     } catch (err) {
         return res.status(500).json({ msg: err })
